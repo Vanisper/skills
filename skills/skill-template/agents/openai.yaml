@@ -1,0 +1,7 @@
+interface:
+  display_name: "Skill 模板"
+  short_description: "内部模板：新建 skill 结构示例"
+  default_prompt: "使用 $skill-template 作为仓库内新建 skill 的结构模板。"
+
+policy:
+  allow_implicit_invocation: false

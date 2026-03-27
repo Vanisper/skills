@@ -26,7 +26,7 @@ npx skills add Vanisper/skills --skill git-workflow -g -a codex
 pnpx skills add Vanisper/skills --skill git-workflow -g -a codex
 ```
 
-### 安装全部 Skills
+### 安装全部公开 Skills
 
 ```bash
 npx skills add Vanisper/skills --skill '*' -g -a codex
@@ -40,10 +40,16 @@ npx skills add Vanisper/skills --skill '*' -g -a codex
 npx skills add /Users/vanisper/Documents/GitHub/skills --skill git-workflow -g -a codex
 ```
 
-### 查看可安装的 Skills
+### 查看可安装的公开 Skills
 
 ```bash
 npx skills add Vanisper/skills --list
+```
+
+如果你想查看内部模板类 skill，需要打开内部 skill 列表：
+
+```bash
+INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
 ```
 
 ## 常用参数
@@ -79,6 +85,19 @@ npx skills add Vanisper/skills --list
 - tag / release 标记规则
 - 中英双语 references
 
+## 仓库内置模板
+
+### `skill-template`
+
+用于新建 skill 的内部模板，主要作用是：
+
+- 提供标准目录结构示例
+- 演示 `SKILL.md`、`agents/openai.yaml`、`references/` 的最小组合
+- 演示中英双语 reference 的组织方式
+- 演示 `metadata.internal: true` 的内部模板写法
+
+这个模板默认不会出现在普通 `--list` 结果中。
+
 ## 仓库结构
 
 仓库内的 skill 默认放在 `skills/<skill>` 目录下，每个 skill 目录通常包含：
@@ -90,11 +109,23 @@ npx skills add Vanisper/skills --list
 - `skills/<skill>/references/`
   按主题拆分的详细参考文档
 
+## 贡献与新建 Skill
+
+详细说明见 [CONTRIBUTING.md](./CONTRIBUTING.md)。
+
+如果你要新增 skill，推荐流程是：
+
+1. 复制 `skills/skill-template` 到 `skills/<new-skill-name>`
+2. 修改 `SKILL.md` frontmatter 和正文
+3. 按需补充 `agents/openai.yaml` 与双语 `references/`
+4. 用本地路径执行 `npx skills add /path/to/repo --list` 验证
+
 ## 维护约定
 
 - skill id 和目录名保持英文，便于安装与跨工具兼容
 - 可以为同一个 skill 同时提供中文和英文 reference
 - 新增 skill 时，优先放到 `skills/<skill>` 下，并保持主入口精简，把细则拆到 `references/`
+- YAML frontmatter 里的长描述建议显式加引号，避免解析失败
 
 ## 相关链接
 
