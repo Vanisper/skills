@@ -1,0 +1,7 @@
+interface:
+  display_name: "Git 工作流"
+  short_description: "Git 操作、提交规范与分支合并"
+  default_prompt: "使用 $git-workflow 按团队规范处理 git status、暂存、commit、合并、回滚或 push。"
+
+policy:
+  allow_implicit_invocation: true
