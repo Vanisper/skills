@@ -81,20 +81,20 @@ npx skills add Vanisper/skills --list
 
 ## 仓库结构
 
-每个 skill 目录通常包含：
+仓库内的 skill 默认放在 `skills/<skill>` 目录下，每个 skill 目录通常包含：
 
-- `<skill>/SKILL.md`
+- `skills/<skill>/SKILL.md`
   skill 入口说明和 metadata
-- `<skill>/agents/openai.yaml`
+- `skills/<skill>/agents/openai.yaml`
   面向 UI / 产品层的展示元信息
-- `<skill>/references/`
+- `skills/<skill>/references/`
   按主题拆分的详细参考文档
 
 ## 维护约定
 
 - skill id 和目录名保持英文，便于安装与跨工具兼容
 - 可以为同一个 skill 同时提供中文和英文 reference
-- 新增 skill 时，优先保持主入口精简，把细则拆到 `references/`
+- 新增 skill 时，优先放到 `skills/<skill>` 下，并保持主入口精简，把细则拆到 `references/`
 
 ## 相关链接
 

@@ -1,9 +1,9 @@
 ---
 name: git-workflow
-description: Reusable Git workflow skill. Use when checking git status, staging changes, writing commit messages, committing, pushing branches, preparing pull requests, handling branch merges, rollback, remotes, or tags. Supports bilingual references: prefer Chinese reference files for Chinese users and English reference files for English-first projects. Commit headers must follow Conventional Commits and the Vanisper commitlint style: English type, optional English scope, project-preferred subject language, max header length 72, optional emoji either before the type or at the start of the subject.
+description: "Reusable Git workflow skill. Use when checking git status, staging changes, writing commit messages, committing, pushing branches, preparing pull requests, handling branch merges, rollback, remotes, or tags. Supports bilingual references: prefer Chinese reference files for Chinese users and English reference files for English-first projects. Commit headers must follow Conventional Commits and the Vanisper commitlint style: English type, optional English scope, project-preferred subject language, max header length 72, optional emoji either before the type or at the start of the subject."
 metadata:
-  description-[zh-CN]: 可复用的 Git 工作流规范。用于处理 git status、暂存、commit、push、Pull Request、分支合并、回滚、远程仓库和 tag 等操作。支持中英双语 reference：中文用户优先使用中文文档，英文项目优先使用英文文档。commit header 需遵循 Conventional Commits 与 Vanisper commitlint 风格：英文 type、可选英文 scope、subject 跟随项目语言偏好、header 长度不超过 72、emoji 可放在 type 前或 subject 开头。
-  short-description: Git 操作与提交规范
+  "description-[zh-CN]": "可复用的 Git 工作流规范。用于处理 git status、暂存、commit、push、Pull Request、分支合并、回滚、远程仓库和 tag 等操作。支持中英双语 reference：中文用户优先使用中文文档，英文项目优先使用英文文档。commit header 需遵循 Conventional Commits 与 Vanisper commitlint 风格：英文 type、可选英文 scope、subject 跟随项目语言偏好、header 长度不超过 72、emoji 可放在 type 前或 subject 开头。"
+  short-description: "Git 操作与提交规范"
 ---
 
 # Git Workflow
