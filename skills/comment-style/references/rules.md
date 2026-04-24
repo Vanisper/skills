@@ -97,10 +97,13 @@ queueWrite(packet)
 
 ## Types, Fields, And Props
 
+- Treat comments as a two-level structure: the top-level comment describes the whole shape, while member comments describe individual fields, properties, or members.
 - Start interface or type comments with what the structure represents.
+- Keep class, interface, and type-level comments focused on overall responsibility or contract rather than documenting each member one by one.
 - Push field-specific detail down to the field itself instead of overloading the top-level comment.
 - Document only fields with traps, format constraints, unit differences, or enum semantics.
 - For props, options, and config objects, prioritize format, units, default behavior, and callback timing.
+- Apply this rule equally to interface fields, class properties, object-shape members, and TypeScript constructor parameter properties. Put field meaning on the member itself instead of stuffing it into a top-level `@remarks` or `@description`.
 
 ```ts
 /**
@@ -117,6 +120,24 @@ interface RawSupplierResponse {
    * - '1' enabled
    */
   is_active: '0' | '1'
+}
+```
+
+```ts
+/**
+ * Spot ticket normalization result
+ * @remarks Stores the normalized ticket, target items, and computed outcomes
+ */
+export class SpotTicketNormalization {
+  constructor(
+    readonly ticket: SpotTicket,
+    readonly targetItems: readonly OrderItem[],
+    /** Target total quantity */
+    readonly baseQty: Quantity,
+    /** User-entered total quantity */
+    readonly inputTotalQty: Quantity,
+    readonly outcomes: readonly NormalizedOutcome[],
+  ) {}
 }
 ```
 

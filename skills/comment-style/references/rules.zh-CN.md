@@ -97,10 +97,13 @@ queueWrite(packet)
 
 ## 类型、字段与 Props
 
+- 把注释理解为主从两层：主注释说明整体对象是什么、承担什么职责；从注释说明具体字段、属性或成员的含义与约束。
 - 接口或类型的首行先写“这是什么数据结构”。
+- 类、接口、type 的主注释只说明整体职责、整体契约或整体约束，不替成员字段逐个下注释。
 - 字段级细节尽量下沉到字段本身，不要把所有字段说明都堆在接口主注释里。
 - 只给存在陷阱、格式约束、单位差异或枚举语义的字段补注释。
 - Props、options、配置对象优先说明格式、单位、默认行为和 callback 触发时机。
+- 这条规则对 interface 字段、class 属性、对象字面量字段和 TypeScript 的 constructor parameter properties 一样成立；字段含义写在对应成员上，不要塞进主注释的 `@remarks` 或 `@description`。
 
 ```ts
 /**
@@ -117,6 +120,24 @@ interface RawSupplierResponse {
    * - '1' 启用
    */
   is_active: '0' | '1'
+}
+```
+
+```ts
+/**
+ * 打点单归一化结果
+ * @remarks 保存归一化后的票据、目标项和计算结果
+ */
+export class SpotTicketNormalization {
+  constructor(
+    readonly ticket: SpotTicket,
+    readonly targetItems: readonly OrderItem[],
+    /** 目标总量 */
+    readonly baseQty: Quantity,
+    /** 用户录入总量 */
+    readonly inputTotalQty: Quantity,
+    readonly outcomes: readonly NormalizedOutcome[],
+  ) {}
 }
 ```
 
