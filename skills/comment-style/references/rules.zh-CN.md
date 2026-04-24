@@ -56,7 +56,7 @@
 ```ts
 /**
  * 按权重分配数量到目标项
- * @remarks
+ * @description
  * - 权重为 0 的项自动跳过
  * - 末项承担余量，保证总量守恒
  * @param total 待分配总量
@@ -72,7 +72,7 @@
  */
 ```
 
-如果项目现有风格已经统一使用 `@description`，延续现有约定即可；不要在一个项目里混出两套标签体系。
+需要补充主说明时默认优先使用 `@description`，因为它通常能直接出现在编辑器提示里；如果项目现有风格已经统一使用 `@remarks`，延续现有约定即可，不要在一个项目里混出两套标签体系。
 
 ### 区块注释与折叠
 
@@ -108,7 +108,7 @@ queueWrite(packet)
 ```ts
 /**
  * 供应商原始响应结构
- * @remarks 后端字段为 snake_case，进入业务层前需先归一化
+ * @description 后端字段为 snake_case，进入业务层前需先归一化
  */
 interface RawSupplierResponse {
   /** 供应商名称 */
@@ -126,7 +126,7 @@ interface RawSupplierResponse {
 ```ts
 /**
  * 打点单归一化结果
- * @remarks 保存归一化后的票据、目标项和计算结果
+ * @description 保存归一化后的票据、目标项和计算结果
  */
 export class SpotTicketNormalization {
   constructor(
@@ -152,9 +152,13 @@ export class SpotTicketNormalization {
 - `@see`
 - `@deprecated`
 
-按项目实际工具链决定是否使用这些标签：
+需要补充主说明时优先考虑：
 
-- `@remarks` 或 `@description`
+- `@description`
+
+仅在项目实际工具链或既有风格需要时使用：
+
+- `@remarks`
 - `@default` 或 `@defaultValue`
 - `@emits`
 

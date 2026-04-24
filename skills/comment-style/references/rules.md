@@ -56,7 +56,7 @@ Do not treat every cross-file symbol as requiring a block comment. If the signat
 ```ts
 /**
  * Distributes a total amount across weighted targets
- * @remarks
+ * @description
  * - Entries with weight 0 are skipped
  * - The last entry absorbs rounding remainder to keep totals stable
  * @param total Total amount to distribute
@@ -72,7 +72,7 @@ Do not treat every cross-file symbol as requiring a block comment. If the signat
  */
 ```
 
-If the project already standardizes on `@description`, keep that convention instead of mixing two tag styles.
+When adding a primary explanation, prefer `@description` by default because it is more likely to appear directly in editor hints. If the project already standardizes on `@remarks`, keep that convention instead of mixing two tag styles.
 
 ### Section Comments And Regions
 
@@ -108,7 +108,7 @@ queueWrite(packet)
 ```ts
 /**
  * Raw supplier response payload
- * @remarks Backend fields stay in snake_case until normalization
+ * @description Backend fields stay in snake_case until normalization
  */
 interface RawSupplierResponse {
   /** Supplier name */
@@ -126,7 +126,7 @@ interface RawSupplierResponse {
 ```ts
 /**
  * Spot ticket normalization result
- * @remarks Stores the normalized ticket, target items, and computed outcomes
+ * @description Stores the normalized ticket, target items, and computed outcomes
  */
 export class SpotTicketNormalization {
   constructor(
@@ -152,9 +152,13 @@ These tags are usually safe and widely understood:
 - `@see`
 - `@deprecated`
 
+Prefer this when adding a primary explanation:
+
+- `@description`
+
 Use these only when the codebase or tooling already supports them:
 
-- `@remarks` or `@description`
+- `@remarks`
 - `@default` or `@defaultValue`
 - `@emits`
 
