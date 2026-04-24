@@ -74,6 +74,16 @@ INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
 
 ## 当前 Skills
 
+### `comment-style`
+
+代码注释与 API 文档规范，包含：
+
+- 注释必要性判断
+- JSDoc / TSDoc 风格 API 文档建议
+- TypeScript / Vue / React 的注释层级约定
+- TODO / FIXME 写法与自检清单
+- 中英双语 references
+
 ### `git-workflow`
 
 可复用的 Git 工作流规范，包含：

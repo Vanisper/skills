@@ -1,0 +1,7 @@
+interface:
+  display_name: "注释规范"
+  short_description: "代码注释、API 文档与语言偏好"
+  default_prompt: "使用 $comment-style 按项目语言偏好补充或整理代码注释、JSDoc/TSDoc 风格 API 文档与 TODO/FIXME 说明。"
+
+policy:
+  allow_implicit_invocation: true
