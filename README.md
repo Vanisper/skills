@@ -84,6 +84,16 @@ INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
 - TODO / FIXME 写法与自检清单
 - 中英双语 references
 
+### `feature-dev`
+
+结构化功能开发工作流，包含：
+
+- 需求发现与澄清问题
+- 代码库探索与相似功能追踪
+- 架构方案设计与取舍
+- 实现前确认、聚焦改动和测试计划
+- 质量审查与最终总结
+
 ### `git-workflow`
 
 可复用的 Git 工作流规范，包含：
