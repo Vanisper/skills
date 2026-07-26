@@ -32,7 +32,8 @@ metadata:
 ## Important Corrections
 
 - 不要把“跨文件消费”直接等同于“必须写 API 注释”。优先为导出 API、公共组件、复用 Hook，或任何存在非直观契约、边界、副作用的符号补文档。
-- `@param`、`@returns`、`@example`、`@throws`、`@see`、`@deprecated` 一般较稳妥；需要补充说明时优先考虑 `@description`，面向 VS Code 悬浮提示 / TypeDoc 类工具链，提示更直接；若项目用经典 jsdoc 生成器，`@description` 会覆盖首行摘要，需在该项目内另行约定。`@remarks`、`@default` / `@defaultValue`、`@emits` 应跟随项目工具链和既有约定，而不是强制一刀切。
+- `@param`、`@returns`、`@example`、`@throws`、`@see`、`@deprecated` 一般较稳妥；需要补充说明时优先考虑 `@description`，面向 VS Code 悬浮提示 / TypeDoc 类工具链，提示更直接；若项目用经典 jsdoc 生成器，`@description` 会覆盖首行摘要，需在该项目内另行约定。
+- `@remarks`、`@default` / `@defaultValue`、`@emits` 这类标签分属不同文档标准或框架（TSDoc、JSDoc、Vue 等），不能一刀切；选用前提见 [rules.md](references/rules.md)「标签建议」。
 - `@emits` 主要用于 Vue 组件或显式事件发射器。React 组件默认应记录 props、callback 和 Hook 契约，而不是套用 “emits” 语义。
 - 默认值的权威来源优先是代码本身。只有当默认值不直观、文档工具会读取该标签，或项目已有明确惯例时，才额外写默认值标签。
 

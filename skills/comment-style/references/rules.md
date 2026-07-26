@@ -173,11 +173,11 @@ export class SpotTicketNormalization {
 
 - `@description`
 
-仅在项目实际工具链或既有风格需要时使用：
+下列标签分属不同文档标准或框架，按项目实际工具链选用，不要一刀切：
 
-- `@remarks`
-- `@default` 或 `@defaultValue`
-- `@emits`
+- `@remarks`：TSDoc 标准标签（VS Code 悬浮提示、TypeDoc 支持），经典 jsdoc 不识别；与 `@description` 同属「补充说明」，同一项目只用一套
+- `@default` / `@defaultValue`：两者同义但分属两个标准——`@default` 是 JSDoc 标签（内容当代码解析），`@defaultValue` 是 TSDoc 标签（内容当 markdown，TypeDoc 首选）；按项目文档工具选用。默认值权威来源仍是代码本身，仅在默认值不直观时才标注
+- `@emits`：Vue 组件事件文档专用（标准 JSDoc 用 `@fires`）；React 不套用，改记 props / callback / Hook 契约
 
 选择原则：
 
