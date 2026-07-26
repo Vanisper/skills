@@ -30,7 +30,7 @@
 - `scope` 不要使用中文。`type` 与 `scope` 会进入 CI / 自动化匹配（commitlint、changelog、release 等），必须稳定、可枚举；中文存在近义词不统一（如「钱包 / wallet」「认证 / 鉴权」）问题，故一律英文。
 - `subject` 的语言应跟随当前项目的语言偏好，并清楚描述实际改动。
 - 如果项目没有明确约定，就跟随主要文档、注释和既有 commit 历史中的主流语言。
-- 完整提交头长度应控制在 72 个字符以内。此 72 是 commitlint 的字符计数（基于 UTF-16 码元），不是终端里的显示宽度。
+- 完整提交头长度应控制在 72 个字符以内。此 72 来自共享配置的 cz-git prompt（`maxHeaderLength: 72`）；直接 `git commit -m` 绕过 cz-git 时，commitlint 继承 config-conventional 的 `header-max-length` 默认值 100，只在 100 处才报错。此 72 基于 UTF-16 码元计数（中文算 1、多数 emoji 算 2），不是终端里的显示宽度。
 - `emoji` 可选。共享配置已开启 `useEmoji: true`、`emojiAlign: left`，默认放在 `type` 之前。
 - 如果使用 `emoji`，以下两种写法都可以：
   - 放在提交头最前面（与配置的 `emojiAlign: left` 一致），例如 `🚀 feat(wallet): 新增企业开户入口`

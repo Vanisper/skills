@@ -82,7 +82,7 @@ metadata:
 
 - `name` 使用英文、小写、短横线分隔
 - `description` 会参与 skill 发现，尽量写清“做什么、什么时候用”
-- 字符串值一律加引号（无论长短，避免解析歧义）
+- 字符串值一律加引号（无论长短，避免解析歧义）；`name` 作为标识符，加不加引号均可，跟随现有 skill 惯例即可
 - frontmatter 必须是合法 YAML，否则 `skills` CLI 会直接忽略这个 skill
 
 ## agents/openai.yaml 字段

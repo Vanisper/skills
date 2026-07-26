@@ -44,12 +44,16 @@ function plantumlBase64(buf) {
   return out;
 }
 
-// 编码：UTF-8 → 原始 deflate（无 zlib 头 / adler）→ PlantUML 自定义 base64。官方 server 与 Kroki 通用。
+// 编码：UTF-8 → 原始 deflate（无 zlib 头 / adler）→ PlantUML 自定义 base64。官方 server 与 Kroki 通用
 const encode = (text) => plantumlBase64(deflateRawSync(Buffer.from(text, 'utf8')));
-// ~h 无压缩十六进制：仅极小图 / 调试，URL 约 2 倍源码长度。
+// ~h 无压缩十六进制：仅极小图 / 调试，URL 约 2 倍源码长度
 const encodeHex = (text) => '~h' + Buffer.from(text, 'utf8').toString('hex');
 
 function buildUrl(source, format, backend, base, hex) {
+  if (backend === 'kroki' && hex) {
+    process.stderr.write('[plantuml] --hex 仅 plantuml 后端可用，kroki 不支持 ~h 编码\n');
+    process.exit(2);
+  }
   const enc = hex ? encodeHex(source) : encode(source);
   if (backend === 'kroki') return `${base || DEFAULT_KROKI_BASE}/plantuml/${format}/${enc}`;
   return `${base || DEFAULT_PLANTUML_BASE}/${format}/${enc}`;
@@ -57,7 +61,7 @@ function buildUrl(source, format, backend, base, hex) {
 
 const readSource = (file) => readFileSync(!file || file === '-' ? 0 : file, 'utf8');
 
-// render 默认输出：源码旁、同名、换格式后缀（diagram.puml + svg -> diagram.svg）。stdin 无法推导。
+// render 默认输出：源码旁、同名、换格式后缀（diagram.puml + svg -> diagram.svg）。stdin 无法推导
 const defaultOut = (file, format) => {
   if (!file || file === '-') return null;
   return file.replace(/\.[^/.]+$/, '') + '.' + format;
@@ -67,10 +71,12 @@ const defaultOut = (file, format) => {
 function validate(format, body) {
   const head = body.subarray(0, 200).toString('utf8');
   const looksHtml = /^\s*<(?:!DOCTYPE|html|head|script)/i.test(head) || head.includes('<html');
-  if (format === 'svg') return (head.startsWith('<svg') || head.startsWith('<?xml')) && !looksHtml;
+  if (format === 'svg') return (head.trimStart().startsWith('<svg') || head.trimStart().startsWith('<?xml')) && !looksHtml;
   if (format === 'png') return body.length > 8 && body[0] === 0x89 && body[1] === 0x50 && body[2] === 0x4e && body[3] === 0x47;
   if (format === 'txt' || format === 'utxt') return !looksHtml;
-  return true; // pdf/eps/latex 仅靠 HTTP 状态
+  // pdf/eps/latex：至少兜底拦截 HTML 注入
+  if (format === 'pdf' || format === 'eps' || format === 'latex') return !looksHtml;
+  return true;
 }
 
 function parseArgs(argv) {
@@ -141,7 +147,13 @@ async function main() {
   }
   const source = readSource(opts.file);
   let format = opts.format;
-  if (sub === 'text') format = opts.utxt ? 'utxt' : opts.format || 'txt';
+  if (sub === 'text') {
+    format = opts.utxt ? 'utxt' : opts.format || 'txt';
+    if (format !== 'txt' && format !== 'utxt') {
+      process.stderr.write(`[plantuml] text 子命令只支持 txt/utxt，不支持 ${format}\n`);
+      process.exit(2);
+    }
+  }
   if (!format) format = 'svg';
   if (!FORMATS.has(format)) {
     process.stderr.write(`[plantuml] 不支持的格式：${format}\n`);

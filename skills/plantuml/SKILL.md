@@ -44,7 +44,7 @@ node scripts/plantuml.mjs text diagram.puml
 
 ## 通用约束
 
-- **格式**：默认 **SVG**（可缩放、不泄露源码）；GitHub README 等拦 SVG 的位置用 **PNG**，分享前 `-nometadata`（PNG 元数据内嵌源码）。
+- **格式**：默认 **SVG**（可缩放、不泄露源码）；GitHub README 等拦 SVG 的位置用 **PNG**——但 PlantUML 生成的 PNG 内嵌源码元数据，对外分享前应改用 SVG 或用本地 jar `-nometadata`（详见 [references/troubleshooting.md](references/troubleshooting.md) PNG 元数据部分）。
 - **ASCII 文本图**：默认走 `/txt/`。`/utxt/`（Unicode 框线）在公共 server 上会被广告层注入 HTML、**不可靠**——要 Unicode 框线用本地 jar `-tutxt` 或自建 server。
 - **隐私红线**：公共 server（plantuml.com / kroki.io）会收到完整源码。含敏感 / 专有信息的图，留档与临时都应切本地后端（`--base` 自建 server、或本地 jar）——**绝不静默改用公共后端**。Kroki 用于大图（免编码 POST）或已有 Kroki 的场景。
 - **校验自愈**：脚本对 svg/png/txt 做 magic 校验，遇到广告层 HTML 注入或语法错会非零退出并把响应体当调试通道打印；按 [references/troubleshooting.md](references/troubleshooting.md) 的降级阶梯修。

@@ -57,7 +57,7 @@ function readFrontmatter(filePath) {
 
 function readReadmeCurrentSkills() {
   const text = readFileSync(README, 'utf8');
-  const section = text.match(/## 当前 Skills\r?\n([\s\S]*?)(\r?\n## )/);
+  const section = text.match(/## 当前 Skills\r?\n([\s\S]*?)(\r?\n## |$)/);
   if (!section) return [];
   return [...section[1].matchAll(/### `([a-z0-9-]+)`/g)].map((m) => m[1]);
 }

@@ -1,5 +1,5 @@
 ---
-name: git-workflow
+name: "git-workflow"
 description: "可复用的 Git 工作流 skill。用于处理 git status、暂存、commit、push、Pull Request、分支合并、回滚、远程仓库和 tag 等操作。commit header 需遵循 Conventional Commits 与 Vanisper commitlint 风格：英文 type、可选英文 scope、subject 跟随项目语言偏好、header 长度不超过 72、emoji 可放在 type 前或 subject 开头。"
 metadata:
   short-description: "Git 操作、提交规范与分支合并"
