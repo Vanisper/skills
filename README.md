@@ -93,6 +93,14 @@ INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
 - remote / push 规则
 - tag / release 标记规则
 
+### `workspace-hub`
+
+壳工作空间方法论，建立或重组「根壳项目 + projects/ 挂载」的多仓库工作空间，包含：
+
+- 三路由流程：全新体系立项、存量项目重组、已有壳空间体检/改造
+- 现场勘察 + 用户确认的路由机制
+- 分阶段问询清单与壳骨架模板
+
 ## 仓库内置模板
 
 ### `skill-template`

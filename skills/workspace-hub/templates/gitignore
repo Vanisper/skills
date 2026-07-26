@@ -1,0 +1,14 @@
+# 模板用途：壳工作空间根 .gitignore（本模板文件名不带点，生成时写为 .gitignore）。
+# 占位符：无。
+# 生成时删除本注释块，下方内容原样保留。
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# 具体项目仓库不纳入根工作空间的 git 管理
+/projects/*
+!/projects/.gitkeep

@@ -1,0 +1,7 @@
+interface:
+  display_name: "壳工作空间方法论"
+  short_description: "壳工作空间方法论：建体系 / 存量重组 / 体检改造"
+  default_prompt: "使用 $workspace-hub 建立或重组壳工作空间：现场勘察、路由确认（全新体系 / 存量重组 / 体检改造）、分阶段问询并按模板生成壳骨架。"
+
+policy:
+  allow_implicit_invocation: true
