@@ -25,6 +25,8 @@ skills/<skill-name>/
 
 不要把 skill 直接放在仓库根目录，否则 `skills` CLI 很可能无法正确发现。
 
+skill 可按需携带 `references/` 之外的资产目录（如 `templates/`、`assets/`），但须在该 skill 的 `SKILL.md` 中登记其用途。
+
 ## 新建 Skill 的推荐流程
 
 ### 1. 复制模板
@@ -80,8 +82,26 @@ metadata:
 
 - `name` 使用英文、小写、短横线分隔
 - `description` 会参与 skill 发现，尽量写清“做什么、什么时候用”
-- 长字符串建议显式加引号
+- 字符串值一律加引号（无论长短，避免解析歧义）
 - frontmatter 必须是合法 YAML，否则 `skills` CLI 会直接忽略这个 skill
+
+## agents/openai.yaml 字段
+
+每个 skill 的 `agents/openai.yaml` 面向 UI / 产品层：
+
+```yaml
+interface:
+  display_name: "展示名（可中文）"
+  short_description: "一句话定位，须与 SKILL.md 的 metadata.short-description 文本一致"
+  default_prompt: "默认调用提示，用 $<skill-name> 占位"
+
+policy:
+  allow_implicit_invocation: true
+```
+
+- `short_description` 必须与 `SKILL.md` 的 `metadata.short-description` 文本一致（`node scripts/check-skills.mjs` 会校验）
+- `policy.allow_implicit_invocation`：默认 `true`，允许 skill 被 description 隐式触发；纯内部或演示 skill 用 `false`，与 `metadata.internal: true` 配套
+- `default_prompt` 用 `$<skill-name>` 占位（如 `$git-workflow`）
 
 ## 语言说明
 
@@ -121,7 +141,27 @@ metadata:
 INSTALL_INTERNAL_SKILLS=1 npx skills add /path/to/repo --list
 ```
 
+## 立项否决题（这个 skill 值不值得进仓库）
+
+新增 skill 前先过一遍，任一答「否」就先别立项：
+
+- **领域是否有界**：能否用一个名词短语命名它的专业面（git 提交 / 壳工作空间 / 注释规范），而不是一个动词（开发功能 / 写代码）。名字读起来像「整个职业」的直接否
+- **是否提供模型默认没有的约束或资产**：内容若约等于模型默认行为（先读再改、优先 rg、重要问题先问），零边际价值；必须有项目特有规则、可落地模板、lookup 表或纠偏条目之一
+- **reference 是否按意图分流**：每个 reference 文件绑定一个用户意图触发器，并在 SKILL.md「何时读哪份 reference」显式映射；单一无条件指针的 skill 结构要拒绝
+- **是否单语言**：不提交 `.zh-CN.md` 双语版，新 skill 一律中文 only（见语言说明）
+- **体积是否匹配边际价值**：警惕 prose 型 reference（叙述通用流程），优先重构为 checklist / 规则表 / 模板
+
+反面案例：曾经的 `feature-dev` skill（领域无界 = 软件工程本身、复述模型默认行为、散文非资产、无条件路由、双语负担），已被移除。
+
 ## 推荐校验流程
+
+### 结构与一致性校验
+
+```bash
+node scripts/check-skills.mjs
+```
+
+校验 frontmatter 可解析、三件套齐备、`metadata.short-description` 与 `openai.yaml` 的 `short_description` 一致、README「当前 Skills」与目录同步。
 
 ### 本地发现校验
 
@@ -153,7 +193,7 @@ npx skills add owner/repo --list
 
 - 目录是否位于 `skills/<skill-name>/`
 - `SKILL.md` frontmatter 是否还能被 YAML 正常解析
-- `agents/openai.yaml` 是否仍与 `SKILL.md` 含义一致
+- `agents/openai.yaml` 的 `short_description` 是否与 `SKILL.md` 的 `metadata.short-description` 文本一致
 - README 和 CONTRIBUTING 是否需要同步更新
 
 ## 相关链接

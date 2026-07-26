@@ -76,30 +76,15 @@ INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
 
 ### `comment-style`
 
-代码注释与 API 文档规范，包含：
-
-- 注释必要性判断
-- JSDoc / TSDoc 风格 API 文档建议
-- TypeScript / Vue / React 的注释层级约定
-- TODO / FIXME 写法与自检清单
+代码注释与 API 文档规范：判断是否需要注释、选注释语言、写 why-focused 注释、为导出 API 补 JSDoc/TSDoc，以及清理 TODO/FIXME（语言无关，覆盖 TS/JS/Vue/React/Rust/Javadoc 等）。
 
 ### `git-workflow`
 
-可复用的 Git 工作流规范，包含：
-
-- commit 规范
-- 分支合并与 PR 规则
-- rollback 规则
-- remote / push 规则
-- tag / release 标记规则
+可复用的 Git 工作流规范：commit、分支合并与 PR、rollback、remote/push、tag/release。
 
 ### `workspace-hub`
 
-壳工作空间方法论，建立或重组「根壳项目 + projects/ 挂载」的多仓库工作空间，包含：
-
-- 三路由流程：全新体系立项、存量项目重组、已有壳空间体检/改造
-- 现场勘察 + 用户确认的路由机制
-- 分阶段问询清单与壳骨架模板
+壳工作空间方法论：建立或重组「根壳项目 + projects/ 挂载」的多仓库工作空间（全新体系 / 存量重组 / 体检改造）。
 
 ## 仓库内置模板
 
@@ -124,6 +109,8 @@ INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
   面向 UI / 产品层的展示元信息
 - `skills/<skill>/references/`
   按主题拆分的详细参考文档
+- `skills/<skill>/<资产目录>/`（可选）
+  某些 skill 会带额外资产目录（如 `workspace-hub` 的 `templates/`），用途在该 skill 的 SKILL.md 中登记
 
 ## 贡献与新建 Skill
 
@@ -141,7 +128,7 @@ INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
 - skill id 和目录名保持英文，便于安装与跨工具兼容
 - 文档统一用中文维护，不提供英文翻译（详见 [CONTRIBUTING.md](./CONTRIBUTING.md) 的语言说明）
 - 新增 skill 时，优先放到 `skills/<skill>` 下，并保持主入口精简，把细则拆到 `references/`
-- YAML frontmatter 里的长描述建议显式加引号，避免解析失败
+- YAML frontmatter 里的字符串值一律加引号，避免解析失败
 
 ## 相关链接
 
