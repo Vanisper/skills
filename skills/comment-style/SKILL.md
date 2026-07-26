@@ -1,17 +1,17 @@
 ---
 name: comment-style
-description: "代码注释与 API 文档规范 skill。用于在 TypeScript、JavaScript、Vue、React 项目中补充、改写、评审或统一注释风格：判断是否需要注释、选择注释语言、编写 why-focused 注释、为导出 API 补充 JSDoc/TSDoc 风格文档，以及清理 TODO/FIXME。"
+description: "代码注释与 API 文档规范 skill。用于在任意主流语言项目（TS/JS/Vue/React、Rust、Java 等）中补充、改写、评审或统一注释风格：判断是否需要注释、选择注释语言、编写 why-focused 注释、为导出 API 补充 JSDoc / TSDoc / rustdoc / Javadoc 风格文档，以及清理 TODO/FIXME。"
 metadata:
   short-description: "代码注释、API 文档与语言偏好"
 ---
 
 # Comment Style
 
-在需要为代码补充、重写、清理或评审注释时使用这个 skill，尤其适合 TypeScript / JavaScript / Vue / React 项目。
+在需要为代码补充、重写、清理或评审注释时使用这个 skill，适用于任意主流语言项目；示例以 TypeScript / JSDoc 为主，但规则不绑定具体技术栈，Rust、Java 等项目同样可触发。
 
 ## 注释语言策略
 
-- 注释语言优先跟随项目主流语言；如果没有明确约定，就参考既有文档、注释、提交信息和 UI 文案。
+- 注释语言与项目主体语言对齐。
 - 单个文件内尽量只保留一种主注释语言；专有名词、协议名、外部字段名保持原文。
 
 ## Goals
@@ -32,7 +32,7 @@ metadata:
 ## Important Corrections
 
 - 不要把“跨文件消费”直接等同于“必须写 API 注释”。优先为导出 API、公共组件、复用 Hook，或任何存在非直观契约、边界、副作用的符号补文档。
-- `@param`、`@returns`、`@example`、`@throws`、`@see`、`@deprecated` 一般较稳妥；需要补充说明时优先考虑 `@description`，因为编辑器提示更直接。`@remarks`、`@default` / `@defaultValue`、`@emits` 应跟随项目工具链和既有约定，而不是强制一刀切。
+- `@param`、`@returns`、`@example`、`@throws`、`@see`、`@deprecated` 一般较稳妥；需要补充说明时优先考虑 `@description`，面向 VS Code 悬浮提示 / TypeDoc 类工具链，提示更直接；若项目用经典 jsdoc 生成器，`@description` 会覆盖首行摘要，需在该项目内另行约定。`@remarks`、`@default` / `@defaultValue`、`@emits` 应跟随项目工具链和既有约定，而不是强制一刀切。
 - `@emits` 主要用于 Vue 组件或显式事件发射器。React 组件默认应记录 props、callback 和 Hook 契约，而不是套用 “emits” 语义。
 - 默认值的权威来源优先是代码本身。只有当默认值不直观、文档工具会读取该标签，或项目已有明确惯例时，才额外写默认值标签。
 
