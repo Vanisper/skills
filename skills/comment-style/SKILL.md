@@ -39,10 +39,17 @@ metadata:
 
 ## Reference Guide
 
-- 核心规则：[references/rules.md](references/rules.md)
+- 通用规则（何时写、语言策略、语境区分、标点、API 契约、TODO）：[references/rules.md](references/rules.md)
+- 分语言惯例（可插拔，一门语言一个文件）：
+  - TypeScript / JavaScript / JSDoc：[references/lang-typescript.md](references/lang-typescript.md)
+  - Rust：[references/lang-rust.md](references/lang-rust.md)
+  - Java / Javadoc：[references/lang-java.md](references/lang-java.md)
 - 提交前检查：[references/checklist.md](references/checklist.md)
 
 ## 何时读取哪份 Reference
 
-- 需要判断某段代码该不该写注释、该用哪种注释形式时，先看 `rules`。
-- 完成注释补充或改写后，收尾前看 `checklist`。
+- 判断该不该写注释、写什么、通用标点与 API 契约规则 → `rules.md`。
+- 处理某门语言的文档注释符号、doc 工具链、标签选择 → 对应 `lang-<语言>.md`。
+- 完成注释补充或改写后，收尾前 → `checklist.md`。
+
+新增一门语言时，加一个 `references/lang-<语言>.md`，并在上面两处登记，不动既有语言文件——分语言惯例是可插拔的。

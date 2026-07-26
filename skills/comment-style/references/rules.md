@@ -158,104 +158,14 @@ export class SpotTicketNormalization {
 }
 ```
 
-## 标签建议
+## 标签与分语言惯例
 
-优先使用通用、稳定的标签：
+通用、稳定的标签（`@param`、`@returns`、`@example`、`@throws`、`@see`、`@deprecated`）跨语言通用；标签选择、文档注释符号、doc 工具链的具体惯例按语言拆分，按项目实际语言查对应文件：
 
-- `@param`
-- `@returns`
-- `@example`
-- `@throws`
-- `@see`
-- `@deprecated`
-
-需要补充主说明时优先考虑：
-
-- `@description`
-
-下列标签分属不同文档标准或框架，按项目实际工具链选用，不要一刀切：
-
-- `@remarks`：TSDoc 标准标签（VS Code 悬浮提示、TypeDoc 支持），经典 jsdoc 不识别；与 `@description` 同属「补充说明」，同一项目只用一套
-- `@default` / `@defaultValue`：两者同义但分属两个标准——`@default` 是 JSDoc 标签（值当代码字面量呈现，可自动探测简单字面量），`@defaultValue` 是 TSDoc 标签（内容当 markdown，TypeDoc 首选）；按项目文档工具选用。默认值权威来源仍是代码本身，仅在默认值不直观时才标注
-- `@emits`：标准 JSDoc 中 `@fires` 的同义词（由 JSDoc issue #324 引入）；Vue 生态惯用 `@emits` 记录组件事件，React 不套用事件语义，改记 props / callback / Hook 契约
-
-选择原则：
-
-- 如果项目已经有稳定约定，就跟随现有约定
-- 如果文档生成工具、IDE 提示或 lint 规则会读取这些标签，按工具要求选
-- 如果没有任何工具或团队约定，不要为了“标签完整”硬塞不必要的标签
-
-## 分语言惯例
-
-### TypeScript / JSDoc
-
-- 块注释用 `/** */`；首导出符号须单独写 JSDoc，避免文件级注释被误挂到第一个导出。
-- 摘要写在首行，补充说明用 `@description`；摘要与 `@description` 之间空一行。
-- 需要补充主说明时默认优先 `@description`：此写法面向 VS Code 悬浮提示 / TypeDoc 类工具链，提示更直接。注意经典 jsdoc 生成器（如 jsdoc CLI）会把 `@description` 当作完整描述并覆盖首行摘要，在该类项目里需另行约定。
-- 若项目已统一使用 `@remarks`，延续现有约定，不要在一个项目里混出两套标签体系。
-
-### Rust
-
-- 条目注释用 `///`，不要用 `//`；模块级注释用 `//!`。
-- 用 rustdoc 小节组织契约：`# Examples`、`# Errors`、`# Panics`、`# Safety`。
-- 文档示例会被 `cargo test` 当作 doctest 运行，写出来就要能通过。
-
-```rust
-/// 按权重把 `total` 分配到 `items`
-///
-/// 权重为 0 的项自动跳过；末项承担余量，保证总量守恒。
-///
-/// # Panics
-///
-/// `items` 为空时 panic。
-pub fn distribute(total: u32, items: &[Item]) -> Vec<u32> {
-    // ...
-}
-```
-
-### Javadoc
-
-- 块注释用 `/** */`；空行在生成文档时会被折叠，分段需显式用 `<p>`，列要点用 `<ul>` / `<li>`。
-- `<li>` 可不闭合，但 `<ul>` 应闭合。
-- 首行摘要是 Javadoc 的概要句，只写一句。
-
-```java
-/**
- * 按权重把 total 分配到 items。
- *
- * <p>权重为 0 的项自动跳过；末项承担余量，保证总量守恒。
- *
- * <ul>
- *   <li>权重为 0 自动跳过
- *   <li>末项承担余量
- * </ul>
- *
- * @param total 待分配总量
- * @return 分配结果
- */
-public List<Integer> distribute(int total, List<Item> items) {
-    // ...
-}
-```
-
-## Vue / React 差异
-
-### Vue
-
-- 组件块注释里可以描述组件职责、约束和事件
-- 只有在项目已经接受这套写法时，再使用 `@emits`
-- `defineProps` / `defineEmits` 附近的字段和事件说明通常比大而全的组件头注释更稳
-
-### React
-
-- 默认不要把组件行为写成 `@emits`
-- 更适合在 props 接口、callback props、custom Hook 上记录契约
-- 对副作用、受控/非受控、时序限制的说明，优先贴近对应 prop 或 Hook 返回值
-
-### Hook / 工具函数
-
-- 说明输入约束、默认行为、返回契约和取消/防抖/节流等时序语义
-- 如果调用顺序、返回结构或副作用不直观，再补 `@example`
+- TypeScript / JavaScript / JSDoc（含标签选择、`@description` 陷阱、Vue / React 差异）→ [lang-typescript.md](lang-typescript.md)
+- Rust（`///`、`//!`、rustdoc 小节）→ [lang-rust.md](lang-rust.md)
+- Java / Javadoc（`<p>`、`<ul>` / `<li>`、空行折叠）→ [lang-java.md](lang-java.md)
+- 新增语言：加一个 `lang-<语言>.md`，并在此列表与 [SKILL.md](../SKILL.md) 路由表登记，不改动本文件其余内容。
 
 ## TODO / FIXME
 
