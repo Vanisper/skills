@@ -12,7 +12,7 @@
 
 1. 更新目标分支：
    - `git checkout main`
-   - `git pull origin main`
+   - `git pull --ff-only origin main`（--ff-only 防止 pull 在分叉时产生意外的 merge commit）
 2. 将目标分支最新内容同步到源分支：
    - `git checkout develop`
    - `git merge main`
@@ -36,6 +36,22 @@
 - 可以保留分支合并轨迹。
 - 更容易追溯某个功能或修复是在什么时候进入主分支的。
 - 后续如果整条分支需要撤销，也更方便处理。
+
+## 个人仓库工作流
+
+个人维护的仓库（只有自己提交、没有协作者）可以走更轻的流程，不必套用团队的 PR / MR 规范：
+
+- 可以直接提交到默认分支（如 `main`），不强制特性分支。
+- `commit` 之后按需 `push`，不需要发起 PR 等待审查。
+- 仍然建议遵循 commit 规范（见 [commit.md](commit.md)），保持历史可读。
+- 同步远端时用 `git pull --ff-only origin main`，避免本地被意外引入 merge commit。
+
+适用场景对照：
+
+- **团队仓库**：特性分支 + PR/MR + 代码审查 + CI；合并走 `--no-ff` 保留轨迹。
+- **个人仓库**：直接在默认分支提交 + 按需 push；省去分支与审查开销。
+
+即便个人仓库，涉及 force-push、reset 改写已推送历史时，仍参考 [remote.md](remote.md) 与 [rollback.md](rollback.md)。
 
 ## Rebase 使用注意事项
 

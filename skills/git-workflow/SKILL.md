@@ -2,7 +2,7 @@
 name: git-workflow
 description: "可复用的 Git 工作流 skill。用于处理 git status、暂存、commit、push、Pull Request、分支合并、回滚、远程仓库和 tag 等操作。commit header 需遵循 Conventional Commits 与 Vanisper commitlint 风格：英文 type、可选英文 scope、subject 跟随项目语言偏好、header 长度不超过 72、emoji 可放在 type 前或 subject 开头。"
 metadata:
-  short-description: "Git 操作与提交规范"
+  short-description: "Git 操作、提交规范与分支合并"
 ---
 
 # Git Workflow
@@ -31,7 +31,7 @@ metadata:
 2. 查看相关 diff：`git diff` 或 `git diff --cached`
 3. 只暂存本次任务需要的文件
 4. 如果需要 commit，按 [references/commit.md](references/commit.md) 执行
-5. 用 `git show --stat --oneline HEAD -1` 核对结果
+5. 用 `git show --stat --oneline HEAD` 核对结果
 6. 只有用户明确要求时才 push
 
 涉及分支操作时：
