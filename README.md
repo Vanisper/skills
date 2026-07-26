@@ -1,76 +1,8 @@
 # Skills
 
-个人维护的技能仓库，收录可复用的 Codex / Agent Skills。
+个人维护的 Agent Skills 仓库，收录一批可复用、跨 AI 编码工具的技能。每个 skill 是一份带 metadata 的说明文档（部分带脚本 / 模板资产），供 Claude Code、Codex、Cursor 等支持 Agent Skills 的工具按需加载。
 
-安装方式参考 [vercel-labs/skills](https://github.com/vercel-labs/skills) 提供的 `skills` CLI，用法尽量保持兼容。
-
-## 安装
-
-### 安装单个 Skill
-
-安装 `git-workflow`：
-
-```bash
-npx skills add Vanisper/skills --skill git-workflow
-```
-
-如果你使用的是 Codex，并希望全局安装到 `~/.codex/skills/`：
-
-```bash
-npx skills add Vanisper/skills --skill git-workflow -g -a codex
-```
-
-如果你更习惯 `pnpm`，也可以把 `npx` 替换成 `pnpx`：
-
-```bash
-pnpx skills add Vanisper/skills --skill git-workflow -g -a codex
-```
-
-### 安装全部公开 Skills
-
-```bash
-npx skills add Vanisper/skills --skill '*' -g -a codex
-```
-
-### 从本地路径安装
-
-适合本地调试或开发中的 skill：
-
-```bash
-npx skills add /Users/vanisper/Documents/GitHub/skills --skill git-workflow -g -a codex
-```
-
-### 查看可安装的公开 Skills
-
-```bash
-npx skills add Vanisper/skills --list
-```
-
-如果你想查看内部模板类 skill，需要打开内部 skill 列表：
-
-```bash
-INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
-```
-
-## 常用参数
-
-| 参数 | 说明 |
-| --- | --- |
-| `-g`, `--global` | 全局安装，而不是安装到当前项目 |
-| `-a`, `--agent` | 指定目标 agent，例如 `codex` |
-| `-s`, `--skill` | 指定 skill 名称，`'*'` 表示全部 |
-| `-l`, `--list` | 仅列出可安装的 skills，不执行安装 |
-| `--copy` | 使用复制而不是符号链接 |
-| `-y`, `--yes` | 跳过交互确认 |
-
-## 安装范围
-
-| 范围 | 默认位置 | 适用场景 |
-| --- | --- | --- |
-| 项目级 | 对应 agent 的项目目录，例如 Codex 的 `.agents/skills/` | 跟随项目一起维护、提交给团队 |
-| 全局 | 对应 agent 的全局目录，例如 Codex 的 `~/.codex/skills/` | 跨项目复用 |
-
-对 Codex 来说，按照 `vercel-labs/skills` 当前的默认映射，项目级通常安装到 `.agents/skills/`，全局安装到 `~/.codex/skills/`。
+skill 清单见下方 [当前 Skills](#当前-skills)。想动手安装再看 [安装](#安装)——安装与分发沿用 [vercel-labs/skills](https://github.com/vercel-labs/skills) 的 `skills` CLI。
 
 ## 当前 Skills
 
@@ -84,11 +16,72 @@ INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
 
 ### `workspace-hub`
 
-壳工作空间方法论：建立或重组「根壳项目 + projects/ 挂载」的多仓库工作空间（全新体系 / 存量重组 / 体检改造）。
+壳工作空间脚手架：建立或重组「根壳项目 + projects/ 挂载」的多仓库工作空间（全新体系 / 存量重组 / 体检改造）。
 
 ### `plantuml`
 
 Mermaid 不够时用 PlantUML 画复杂图（时序/类/组件/部署/状态/用例/C4）：编码成 server/Kroki URL 取回 SVG/PNG 或 ASCII 文本图，默认零本地 Java。
+
+## 安装
+
+以下用 `npx`；习惯 `pnpm` 的把 `npx` 换成 `pnpx` 即可。
+
+### 查看有哪些
+
+先列出可安装的 skill，不做任何改动：
+
+```bash
+npx skills add Vanisper/skills --list
+```
+
+内部模板类 skill（如 `skill-template`）默认不列出，需要时打开：
+
+```bash
+INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
+```
+
+### 安装
+
+安装单个 skill（默认装到当前项目）：
+
+```bash
+npx skills add Vanisper/skills --skill git-workflow
+```
+
+安装全部公开 skill：
+
+```bash
+npx skills add Vanisper/skills --skill '*'
+```
+
+`-g` 全局安装、`-a <agent>` 指定目标工具（如 `codex`）。例：全局装到 Codex——
+
+```bash
+npx skills add Vanisper/skills --skill git-workflow -g -a codex
+```
+
+本地调试用路径代替仓库名：
+
+```bash
+npx skills add /path/to/skills --skill git-workflow --list
+```
+
+### 更新
+
+重新执行对应的 `add` 命令即可拉取最新版本；覆盖前 CLI 会提示确认，`-y` 可跳过。
+
+### 常用参数
+
+| 参数 | 说明 |
+| --- | --- |
+| `-l`, `--list` | 仅列出，不安装 |
+| `-s`, `--skill` | 指定 skill，`'*'` 表示全部 |
+| `-g`, `--global` | 全局安装，而非当前项目 |
+| `-a`, `--agent` | 目标 agent，如 `codex` |
+| `--copy` | 用复制而非符号链接 |
+| `-y`, `--yes` | 跳过覆盖确认 |
+
+安装位置由目标 agent 决定：项目级通常在该 agent 的项目目录（Codex 为 `.agents/skills/`），全局在其全局目录（Codex 为 `~/.codex/skills/`）。
 
 ## 仓库内置模板
 

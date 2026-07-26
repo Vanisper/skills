@@ -1,5 +1,5 @@
 <!--
-模板用途：壳工作空间的 AI 协作约定（AGENTS.md），方法论主体。
+模板用途：壳工作空间的 AI 协作约定（AGENTS.md），工作空间约定的主体。
 占位符：
 - {{workspace_purpose}}：本工作空间承载的项目体系名称（与根 README 保持一致）
 - {{primary_language}}：工作空间主体语言（如「中文」）

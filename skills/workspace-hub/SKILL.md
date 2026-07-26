@@ -2,10 +2,10 @@
 name: workspace-hub
 description: "建立或重组「壳工作空间」——以根壳项目归集多仓库项目体系（文档、规则、统一视角在壳，项目挂在 projects/ 下各自独立）。当用户想为新构想立项建体系、把散落各处的既有项目组织进统一工作空间、或对已有壳工作空间做体检/改造时使用。"
 metadata:
-  short-description: "壳工作空间方法论：建体系 / 存量重组 / 体检改造"
+  short-description: "壳工作空间脚手架：建体系 / 存量重组 / 体检改造"
 ---
 
-# workspace-hub — 壳工作空间方法论
+# workspace-hub — 壳工作空间脚手架
 
 把「根壳项目 + projects/ 挂载」模式沉淀为可执行流程。壳仓库只承载文档、规划与约定；真实项目以 clone 或链接挂在 `projects/` 下，git 各自独立。`templates/` 即一处可直接落地的壳骨架参照。
 
