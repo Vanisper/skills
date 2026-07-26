@@ -86,6 +86,10 @@ INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
 
 壳工作空间方法论：建立或重组「根壳项目 + projects/ 挂载」的多仓库工作空间（全新体系 / 存量重组 / 体检改造）。
 
+### `plantuml`
+
+Mermaid 不够时用 PlantUML 画复杂图（时序/类/组件/部署/状态/用例/C4）：编码成 server/Kroki URL 取回 SVG/PNG 或 ASCII 文本图，默认零本地 Java。
+
 ## 仓库内置模板
 
 ### `skill-template`
