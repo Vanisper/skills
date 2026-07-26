@@ -1,22 +1,18 @@
 ---
 name: comment-style
-description: "Code comment and API doc style guide for adding, revising, or reviewing comments in TypeScript, JavaScript, Vue, and React codebases. Use when deciding whether code needs comments, standardizing comment language, writing concise why-focused comments, documenting exported APIs with JSDoc/TSDoc-compatible tags, or cleaning up stale TODO/FIXME notes. Supports bilingual references: prefer Chinese references for Chinese users and English references for English-first projects."
+description: "代码注释与 API 文档规范 skill。用于在 TypeScript、JavaScript、Vue、React 项目中补充、改写、评审或统一注释风格：判断是否需要注释、选择注释语言、编写 why-focused 注释、为导出 API 补充 JSDoc/TSDoc 风格文档，以及清理 TODO/FIXME。"
 metadata:
   short-description: "代码注释、API 文档与语言偏好"
-  "description-[zh-CN]": "代码注释与 API 文档规范。用于在 TypeScript、JavaScript、Vue、React 项目中补充、改写、评审或统一注释风格，包括判断是否需要注释、选择注释语言、编写 why-focused 注释、为导出 API 补充 JSDoc/TSDoc 风格文档，以及清理 TODO/FIXME。支持中英双语 reference：中文用户优先中文，英文项目优先英文。"
 ---
 
 # Comment Style
 
 在需要为代码补充、重写、清理或评审注释时使用这个 skill，尤其适合 TypeScript / JavaScript / Vue / React 项目。
 
-## Language Strategy
+## 注释语言策略
 
-- skill id、目录名、`name` 和 reference 基础文件名使用英文。
 - 注释语言优先跟随项目主流语言；如果没有明确约定，就参考既有文档、注释、提交信息和 UI 文案。
 - 单个文件内尽量只保留一种主注释语言；专有名词、协议名、外部字段名保持原文。
-- 中文语境或中文项目优先读取 `*.zh-CN.md`。
-- 英文语境或英文项目优先读取默认英文 `.md` 文件。
 
 ## Goals
 
@@ -42,15 +38,10 @@ metadata:
 
 ## Reference Guide
 
-- 核心规则：
-  - 中文：[references/rules.zh-CN.md](references/rules.zh-CN.md)
-  - English: [references/rules.md](references/rules.md)
-- 提交前检查：
-  - 中文：[references/checklist.zh-CN.md](references/checklist.zh-CN.md)
-  - English: [references/checklist.md](references/checklist.md)
+- 核心规则：[references/rules.md](references/rules.md)
+- 提交前检查：[references/checklist.md](references/checklist.md)
 
 ## 何时读取哪份 Reference
 
 - 需要判断某段代码该不该写注释、该用哪种注释形式时，先看 `rules`。
 - 完成注释补充或改写后，收尾前看 `checklist`。
-- 中文语境下优先读取 `*.zh-CN.md`；英文语境下优先读取默认英文文件。

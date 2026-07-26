@@ -1,20 +1,13 @@
 ---
 name: git-workflow
-description: "Reusable Git workflow skill. Use when checking git status, staging changes, writing commit messages, committing, pushing branches, preparing pull requests, handling branch merges, rollback, remotes, or tags. Supports bilingual references: prefer Chinese reference files for Chinese users and English reference files for English-first projects. Commit headers must follow Conventional Commits and the Vanisper commitlint style: English type, optional English scope, project-preferred subject language, max header length 72, optional emoji either before the type or at the start of the subject."
+description: "可复用的 Git 工作流 skill。用于处理 git status、暂存、commit、push、Pull Request、分支合并、回滚、远程仓库和 tag 等操作。commit header 需遵循 Conventional Commits 与 Vanisper commitlint 风格：英文 type、可选英文 scope、subject 跟随项目语言偏好、header 长度不超过 72、emoji 可放在 type 前或 subject 开头。"
 metadata:
   short-description: "Git 操作与提交规范"
-  "description-[zh-CN]": "可复用的 Git 工作流规范。用于处理 git status、暂存、commit、push、Pull Request、分支合并、回滚、远程仓库和 tag 等操作。支持中英双语 reference：中文用户优先使用中文文档，英文项目优先使用英文文档。commit header 需遵循 Conventional Commits 与 Vanisper commitlint 风格：英文 type、可选英文 scope、subject 跟随项目语言偏好、header 长度不超过 72、emoji 可放在 type 前或 subject 开头。"
 ---
 
 # Git Workflow
 
 在需要处理常见 Git 操作的代码仓库或工作区中使用这个 skill。
-
-## 语言策略
-
-- skill id、目录名、`name` 和 reference 基础文件名使用英文。
-- 中文语境或中文项目优先读取 `*.zh-CN.md`。
-- 英文语境或英文项目优先读取默认英文 `.md` 文件。
 
 ## 目标
 
@@ -37,7 +30,7 @@ metadata:
 1. 检查状态：`git status --short`
 2. 查看相关 diff：`git diff` 或 `git diff --cached`
 3. 只暂存本次任务需要的文件
-4. 如果需要 commit，按 [references/commit.zh-CN.md](references/commit.zh-CN.md) 或 [references/commit.md](references/commit.md) 执行
+4. 如果需要 commit，按 [references/commit.md](references/commit.md) 执行
 5. 用 `git show --stat --oneline HEAD -1` 核对结果
 6. 只有用户明确要求时才 push
 
@@ -49,29 +42,19 @@ metadata:
 
 ## Reference Guide
 
-按用户语言或项目语言偏好选择对应 reference 文件：
-
-- 提交规范：
-  - 中文：[references/commit.zh-CN.md](references/commit.zh-CN.md)
-  - English: [references/commit.md](references/commit.md)
-- 分支合并与 PR 规范：
-  - 中文：[references/merge.zh-CN.md](references/merge.zh-CN.md)
-  - English: [references/merge.md](references/merge.md)
-- 回滚规范：
-  - 中文：[references/rollback.zh-CN.md](references/rollback.zh-CN.md)
-  - English: [references/rollback.md](references/rollback.md)
-- 远程仓库与 push 规范：
-  - 中文：[references/remote.zh-CN.md](references/remote.zh-CN.md)
-  - English: [references/remote.md](references/remote.md)
-- tag 与发布标记规范：
-  - 中文：[references/tags.zh-CN.md](references/tags.zh-CN.md)
-  - English: [references/tags.md](references/tags.md)
+- 提交规范：[references/commit.md](references/commit.md)
+- 分支合并与 PR 规范：[references/merge.md](references/merge.md)
+- 回滚规范：[references/rollback.md](references/rollback.md)
+- 远程仓库与 push 规范：[references/remote.md](references/remote.md)
+- tag 与发布标记规范：[references/tags.md](references/tags.md)
 
 ## 何时读取哪份 Reference
 
-- 用户在中文语境下询问 commit、merge、rollback、remote、tag，优先读取对应 `*.zh-CN.md`。
-- 英文项目或英文语境下，优先读取默认英文 `.md` 文件。
-- 如果某个主题只有一种语言版本，就直接使用现有版本。
+- 涉及 commit message、暂存、提交时，读 `commit.md`。
+- 涉及分支合并、PR 时，读 `merge.md`。
+- 涉及回退、撤销、revert / reset 时，读 `rollback.md`。
+- 涉及远程仓库、push、force-push 时，读 `remote.md`。
+- 涉及 tag、release 标记时，读 `tags.md`。
 
 ## 默认行为
 

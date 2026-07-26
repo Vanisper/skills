@@ -1,24 +1,24 @@
-# Rollback Rules
+# 回滚规范
 
-Choose rollback strategy by impact scope:
+回滚策略要根据影响范围来选：
 
-- Uncommitted file changes: prefer `git restore <file>` or another targeted file restore.
-- Local commits not yet pushed: reset may be acceptable if the user explicitly wants to rewrite local history.
-- Pushed or shared commits: prefer `git revert` instead of reset.
-- Merged branch rollback on shared history: prefer `git revert -m 1 <merge-commit>`.
+- 还没提交的文件改动：优先使用 `git restore <file>` 或其他定向恢复方式。
+- 仅存在于本地、尚未推送的提交：如果用户明确想改写本地历史，可以考虑 reset。
+- 已经推送或已经共享给他人的提交：优先使用 `git revert`，不要直接 reset。
+- 共享历史上的 merge 回滚：优先使用 `git revert -m 1 <merge-commit>`。
 
-Never rewrite shared history unless the user clearly asks for it and the branch is safe to rewrite.
+除非用户明确要求，并且分支历史可以安全改写，否则不要重写共享历史。
 
-## Merge Rollback
+## Merge 回滚
 
-For shared branches, prefer reverting a merge instead of rewriting history:
+对于共享分支，优先通过 revert merge commit 的方式撤销整次合并：
 
 - `git revert -m 1 <merge-commit>`
 
-Use reset or force-push for merge rollback only when the user explicitly asks for a history rewrite and the branch is safe to rewrite.
+只有在用户明确要求改写历史、且分支允许这样做时，才考虑 reset 或 force-push。
 
-## Recovery Mindset
+## 恢复心智
 
-- Prefer reversible actions on shared branches.
-- Explain the impact before using reset or force-push.
-- When unsure whether commits are already shared, treat them as shared.
+- 共享分支上优先选择可逆操作。
+- 使用 reset 或 force-push 前，先说明影响。
+- 如果不确定某个提交是否已经被共享，默认按“已经共享”处理。

@@ -48,7 +48,6 @@ rsync -a skills/skill-template/ skills/<new-skill-name>/
 - `skills/<skill-name>/SKILL.md`
   - `name`
   - `description`
-  - `metadata.description-[zh-CN]`
   - `metadata.short-description`
 - `skills/<skill-name>/agents/openai.yaml`
   - `display_name`
@@ -62,7 +61,7 @@ rsync -a skills/skill-template/ skills/<new-skill-name>/
 ```yaml
 ---
 name: my-skill
-description: "What this skill does and when to use it."
+description: "说明这个 skill 的用途和触发场景。"
 ---
 ```
 
@@ -71,9 +70,8 @@ description: "What this skill does and when to use it."
 ```yaml
 ---
 name: my-skill
-description: "English description for discovery."
+description: "写清楚这个 skill 做什么、什么时候用，参与 skill 发现。"
 metadata:
-  "description-[zh-CN]": "中文描述，方便中文使用者理解。"
   short-description: "简短说明"
 ---
 ```
@@ -83,25 +81,21 @@ metadata:
 - `name` 使用英文、小写、短横线分隔
 - `description` 会参与 skill 发现，尽量写清“做什么、什么时候用”
 - 长字符串建议显式加引号
-- 像 `description-[zh-CN]` 这种包含特殊字符的 key 也建议显式加引号
 - frontmatter 必须是合法 YAML，否则 `skills` CLI 会直接忽略这个 skill
 
-## 双语文档建议
+## 语言说明
 
-推荐做法是：
+本仓库的 skill 文档统一用中文维护，包括 `SKILL.md` 正文、`references/` 和 frontmatter 的 `description`，不提供英文翻译。这是出于维护成本的取舍，并非语言偏好。
 
-- skill id 保持英文
-- `SKILL.md` 主入口可以按仓库主要维护语言来写
-- 详细说明放到 `references/`
-- 中文文件使用 `*.zh-CN.md`
-- 英文文件使用默认的 `.md`
+- skill id、目录名、`name` 保持英文，兼容 `skills` CLI 的发现与安装
+- `references/` 下每个主题只保留一份中文文件，命名用 `*.md`，不加语言后缀
+- 如果某个 skill 确实需要面向英文用户，再单独处理，不作为默认约定
 
 例如：
 
 ```text
 references/
-├── checklist.md
-└── checklist.zh-CN.md
+└── checklist.md
 ```
 
 ## 什么时候用 `metadata.internal: true`
@@ -152,8 +146,7 @@ npx skills add owner/repo --list
 ## 文案建议
 
 - 仓库级 `README.md` 用中文，方便维护
-- 面向发现的 `description` 建议保留英文
-- 如果 skill 面向中文用户，可以补 `description-[zh-CN]`
+- `description` 参与 skill 发现
 - 不要把复杂细节都塞进 `SKILL.md`，优先拆到 `references/`
 
 ## 维护现有 Skill 时的检查项
@@ -161,7 +154,6 @@ npx skills add owner/repo --list
 - 目录是否位于 `skills/<skill-name>/`
 - `SKILL.md` frontmatter 是否还能被 YAML 正常解析
 - `agents/openai.yaml` 是否仍与 `SKILL.md` 含义一致
-- 中文和英文 references 是否语义一致
 - README 和 CONTRIBUTING 是否需要同步更新
 
 ## 相关链接

@@ -1,36 +1,34 @@
-# New Skill Checklist
+# 新建 Skill 清单
 
-## Minimum Structure
+## 最小结构
 
-A new skill should include at least:
+新 skill 至少应包含：
 
 - `SKILL.md`
 - `agents/openai.yaml`
 - `references/`
 
-## Frontmatter Checks
+## Frontmatter 检查项
 
-- `name` uses English kebab-case
-- `description` clearly explains what the skill does and when to use it
-- long descriptions are explicitly quoted
-- special keys such as `description-[zh-CN]` are explicitly quoted
-- `metadata.internal: true` is set when the skill should stay hidden from normal discovery
+- `name` 是否为英文短横线命名
+- `description` 是否解释了“做什么、什么时候用”
+- 长描述是否已显式加引号
+- 是否需要 `metadata.internal: true`
 
-## Documentation Checks
+## 文档检查项
 
-- the main entry stays concise
-- detailed guidance is split into `references/`
-- Chinese and English references stay semantically aligned
+- 主入口是否足够简洁
+- 复杂细节是否拆到了 `references/`
 
-## Validation Commands
+## 校验命令
 
-For public skills:
+公开 skill：
 
 ```bash
 npx skills add /path/to/repo --list
 ```
 
-For internal template-style skills:
+内部模板类 skill：
 
 ```bash
 INSTALL_INTERNAL_SKILLS=1 npx skills add /path/to/repo --list

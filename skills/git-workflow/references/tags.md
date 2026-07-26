@@ -1,20 +1,20 @@
-# Tags And Release Markers
+# Tag 与发布标记规范
 
-For release tags:
+处理发布 tag 时：
 
-- Prefer annotated tags for formal releases.
-- Lightweight tags can be used for temporary markers, but they should not be the default style for release tags.
-- Push specific tags intentionally instead of pushing all tags by default.
-- Do not delete or move published tags unless the user explicitly asks.
+- 正式版本优先使用 annotated tag。
+- lightweight tag 可以用于临时标记，但不要作为默认发布方式。
+- 推送 tag 时尽量显式指定目标 tag，不要默认一次性推所有 tag。
+- 已经发布出去的 tag，不要随意删除或移动，除非用户明确要求。
 
-## Useful Commands
+## 常用命令
 
 - `git tag -a v1.2.3 -m "v1.2.3"`
 - `git push origin v1.2.3`
 - `git tag --list`
 
-## Release Mindset
+## 发布心智
 
-- Treat published tags as stable release markers.
-- Be explicit about which version tag is being created or pushed.
-- If the repository has an existing release process, follow that instead of inventing a new one.
+- 把已发布 tag 视为稳定的发布标记。
+- 创建或推送 tag 时，要明确具体版本号。
+- 如果仓库已有发布流程，优先遵循现有流程，而不是额外发明一套。

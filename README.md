@@ -82,7 +82,6 @@ INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
 - JSDoc / TSDoc 风格 API 文档建议
 - TypeScript / Vue / React 的注释层级约定
 - TODO / FIXME 写法与自检清单
-- 中英双语 references
 
 ### `git-workflow`
 
@@ -93,7 +92,6 @@ INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
 - rollback 规则
 - remote / push 规则
 - tag / release 标记规则
-- 中英双语 references
 
 ## 仓库内置模板
 
@@ -103,7 +101,7 @@ INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
 
 - 提供标准目录结构示例
 - 演示 `SKILL.md`、`agents/openai.yaml`、`references/` 的最小组合
-- 演示中英双语 reference 的组织方式
+- 演示 `references/` 的组织方式
 - 演示 `metadata.internal: true` 的内部模板写法
 
 这个模板默认不会出现在普通 `--list` 结果中。
@@ -127,13 +125,13 @@ INSTALL_INTERNAL_SKILLS=1 npx skills add Vanisper/skills --list
 
 1. 复制 `skills/skill-template` 到 `skills/<new-skill-name>`
 2. 修改 `SKILL.md` frontmatter 和正文
-3. 按需补充 `agents/openai.yaml` 与双语 `references/`
+3. 按需补充 `agents/openai.yaml` 与 `references/`
 4. 用本地路径执行 `npx skills add /path/to/repo --list` 验证
 
 ## 维护约定
 
 - skill id 和目录名保持英文，便于安装与跨工具兼容
-- 可以为同一个 skill 同时提供中文和英文 reference
+- 文档统一用中文维护，不提供英文翻译（详见 [CONTRIBUTING.md](./CONTRIBUTING.md) 的语言说明）
 - 新增 skill 时，优先放到 `skills/<skill>` 下，并保持主入口精简，把细则拆到 `references/`
 - YAML frontmatter 里的长描述建议显式加引号，避免解析失败
 

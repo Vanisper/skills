@@ -1,16 +1,16 @@
-# Comment Checklist
+# 注释检查清单
 
-Before finishing or committing, quickly check:
+在提交或结束修改前，快速确认这些问题：
 
-- does this comment add information the code alone does not reveal
-- does this code actually need a comment, or are naming and types already enough
-- does the first line say what the symbol or structure is
-- does the comment language match the dominant language of the project and file
-- have field, prop, and option details been pushed down to the narrowest useful scope
-- does the top-level comment stay about the whole shape, with field and property meaning documented on the members themselves, including constructor parameter properties
-- do public APIs or non-obvious contracts use the block-comment style accepted by this codebase
-- are the chosen tags compatible with the project's tooling, lint rules, and doc generation setup
-- does React code avoid misusing `@emits`, and do Vue event notes stay close to the real event source
-- is the default value already obvious from code, with extra documentation added only when it truly helps
-- do TODO / FIXME notes include a reason and next step instead of a bare marker
-- are there any stale, vague, or oversized comments that should be removed instead
+- 这条注释是否解释了代码本身不容易看出来的信息，而不是复述代码
+- 这段代码是否真的需要注释；如果命名和类型已经足够清晰，就不要硬补
+- 第一行是否先说明“这是什么”
+- 注释语言是否跟随当前项目和当前文件的主流语言
+- 字段、Props、options 的细节是否已经下沉到最小作用域，而不是堆在顶层注释里
+- 主注释是否只说明整体对象；字段、属性和 constructor parameter properties 的说明是否已经下沉到成员本身
+- 公共 API 或非直观契约是否使用了项目接受的 JSDoc / TSDoc 风格块注释
+- 使用的标签是否和项目现有工具链、lint 规则、文档生成方式兼容
+- React 代码是否避免误用 `@emits`；Vue 事件说明是否贴近真实事件来源
+- 默认值是否已经由代码本身清楚表达；只有在确实需要时才额外补默认值说明
+- TODO / FIXME 是否写明了原因和下一步，而不是只留空标记
+- 有没有过时、空泛、范围过大的注释需要一起删除

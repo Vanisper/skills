@@ -1,67 +1,67 @@
-# Comment Rules
+# 注释规则
 
-Comments explain why. Code explains how.
+注释解释为什么，代码解释怎么做。
 
-## When Comments Are Worth Adding
+## 何时需要注释
 
-Usually skip comments when:
+优先不写注释的场景：
 
-- names already carry the intent
-- types, signatures, or tests already explain the contract
-- control flow is straightforward
-- the comment would only restate the code
+- 命名已经足够自解释
+- 类型、签名或测试已经清楚表达意图
+- 直观的条件判断、循环和常规框架用法
+- 只会复述代码表面的动作
 
-Add comments when:
+应该补注释的场景：
 
-- business rules depend on hidden assumptions, historical context, or external constraints
-- a workaround, fallback, compatibility branch, or technical debt needs justification
-- algorithms, regexes, bitwise logic, or timing behavior are not obvious
-- fields, units, formats, enums, or return contracts are easy to misuse
-- usage order, examples, or side effects are not obvious from the call site
+- 业务规则存在隐含前提、历史包袱或外部依赖
+- 有临时方案、技术债、兜底逻辑或兼容性分支
+- 算法、正则、位运算、时序控制不直观
+- 接口字段、单位、格式、枚举值或返回契约有陷阱
+- 示例、调用顺序或副作用不看上下文就容易误用
 
-## Language And Tone
+## 语言与语气
 
-- Follow the dominant project language. If no rule exists, infer it from existing docs, comments, and commit history.
-- Keep one primary comment language per file whenever practical.
-- Start with "what this is" before describing process details.
-- Chinese comments are often written without end punctuation. English comments should stay concise, but readability matters more than forcing a punctuation rule.
-- Break long explanations into lists so constraints and ordering are easy to scan.
+- 注释语言跟随项目主流语言；没有明确约定时，参考既有文档、注释和提交历史。
+- 单个文件内尽量只保留一种主注释语言。
+- 第一行优先写“这是什么”，不要先写过程描述。
+- 中文注释通常不加句末标点；英文注释以项目现有风格为准，不必为了去标点而牺牲可读性。
+- 长句拆成列表，让约束、顺序和边界一眼可扫。
 
-## Comment Layers
+## 注释层级
 
-### File Headers
+### 文件头注释
 
-Use multi-line `//` headers when a file has a cohesive responsibility, staged workflow, or hidden constraints. This avoids accidentally attaching `/** */` to the next export.
+当一个文件承载明确职责、阶段划分或隐藏约束时，可以使用多行 `//` 注释做文件头，避免 `/** */` 被错误关联到下方第一个导出。
 
 ```ts
 // ============================================================
-// Order item normalization pipeline
+// 订单商品项归一化拆分器
 // ------------------------------------------------------------
-// - Redistributes quantity by priority
-// - Preserves original order within the same priority
-// - Assigns remainder to the last item to keep totals stable
+// - 按优先级重新分配数量
+// - 同优先级保持原订单顺序
+// - 末项承担余量，保证总量守恒
 // ============================================================
 ```
 
-### API Block Comments
+### API 块注释
 
-Prefer JSDoc / TSDoc-style blocks for:
+对下面这些对象优先使用 JSDoc / TSDoc 风格块注释：
 
-- exported functions, classes, interfaces, and types
-- public components, shared hooks, and reusable utilities
-- internal symbols whose contract, edge cases, or side effects are still non-obvious
+- 导出函数、类、接口、类型
+- 公共组件、公共 Hook、复用工具函数
+- 即使不导出，但契约、边界或副作用明显不直观的内部符号
 
-Do not treat every cross-file symbol as requiring a block comment. If the signature is already clear and there is no hidden contract, skip it.
+不要把“所有跨文件消费”都机械地升级成块注释。签名已经足够清晰、行为也没有隐藏约束时，可以不写。
 
 ```ts
 /**
- * Distributes a total amount across weighted targets
+ * 按权重分配数量到目标项
  * @description
- * - Entries with weight 0 are skipped
- * - The last entry absorbs rounding remainder to keep totals stable
- * @param total Total amount to distribute
- * @param items Target entries
- * @returns Allocation results in input order
+ * - 权重为 0 的项自动跳过
+ * - 末项承担余量，保证总量守恒
+ * @param total 待分配总量
+ * @param items 目标项数组
+ * @returns 顺序与输入一致的分配结果
  * @example
  * ```ts
  * distribute(100, [
@@ -72,52 +72,52 @@ Do not treat every cross-file symbol as requiring a block comment. If the signat
  */
 ```
 
-When adding a primary explanation, prefer `@description` by default because it is more likely to appear directly in editor hints. If the project already standardizes on `@remarks`, keep that convention instead of mixing two tag styles.
+需要补充主说明时默认优先使用 `@description`，因为它通常能直接出现在编辑器提示里；如果项目现有风格已经统一使用 `@remarks`，延续现有约定即可，不要在一个项目里混出两套标签体系。
 
-### Section Comments And Regions
+### 区块注释与折叠
 
-Section comments should mark meaningful phases in a long block, not every couple of lines.
+区块注释只用于长逻辑的阶段划分，不要给每一两行代码都加标题。
 
 ```ts
-// Validate required input
-// Sort by priority
-// Compute the remaining quantity
+// 校验输入完整性
+// 按优先级排序
+// 计算剩余未分配数量
 ```
 
-Use `//#region` / `//#endregion` only when folding genuinely helps, such as lifecycle groups, platform branches, or multiple parallel logic units.
+需要 IDE 折叠时再用 `//#region` / `//#endregion`，常见于生命周期、平台分支或多个并列逻辑单元。
 
-### Inline Comments
+### 行内注释
 
-Inline comments should explain local traps, tradeoffs, or why an apparently simpler implementation was avoided.
+行内注释只解释局部陷阱、取舍或“为什么不这么写”。
 
 ```ts
-// Intentionally avoid await here to keep Bluetooth writes from becoming fully serial
+// 故意不用 await，避免串行发送导致蓝牙缓冲区阻塞
 queueWrite(packet)
 ```
 
-## Types, Fields, And Props
+## 类型、字段与 Props
 
-- Treat comments as a two-level structure: the top-level comment describes the whole shape, while member comments describe individual fields, properties, or members.
-- Start interface or type comments with what the structure represents.
-- Keep class, interface, and type-level comments focused on overall responsibility or contract rather than documenting each member one by one.
-- Push field-specific detail down to the field itself instead of overloading the top-level comment.
-- Document only fields with traps, format constraints, unit differences, or enum semantics.
-- For props, options, and config objects, prioritize format, units, default behavior, and callback timing.
-- Apply this rule equally to interface fields, class properties, object-shape members, and TypeScript constructor parameter properties. Put field meaning on the member itself instead of stuffing it into a top-level `@remarks` or `@description`.
+- 把注释理解为主从两层：主注释说明整体对象是什么、承担什么职责；从注释说明具体字段、属性或成员的含义与约束。
+- 接口或类型的首行先写“这是什么数据结构”。
+- 类、接口、type 的主注释只说明整体职责、整体契约或整体约束，不替成员字段逐个下注释。
+- 字段级细节尽量下沉到字段本身，不要把所有字段说明都堆在接口主注释里。
+- 只给存在陷阱、格式约束、单位差异或枚举语义的字段补注释。
+- Props、options、配置对象优先说明格式、单位、默认行为和 callback 触发时机。
+- 这条规则对 interface 字段、class 属性、对象字面量字段和 TypeScript 的 constructor parameter properties 一样成立；字段含义写在对应成员上，不要塞进主注释的 `@remarks` 或 `@description`。
 
 ```ts
 /**
- * Raw supplier response payload
- * @description Backend fields stay in snake_case until normalization
+ * 供应商原始响应结构
+ * @description 后端字段为 snake_case，进入业务层前需先归一化
  */
 interface RawSupplierResponse {
-  /** Supplier name */
+  /** 供应商名称 */
   s_name: string
 
   /**
-   * Activation state
-   * - '0' disabled
-   * - '1' enabled
+   * 启用状态
+   * - '0' 禁用
+   * - '1' 启用
    */
   is_active: '0' | '1'
 }
@@ -125,25 +125,25 @@ interface RawSupplierResponse {
 
 ```ts
 /**
- * Spot ticket normalization result
- * @description Stores the normalized ticket, target items, and computed outcomes
+ * 打点单归一化结果
+ * @description 保存归一化后的票据、目标项和计算结果
  */
 export class SpotTicketNormalization {
   constructor(
     readonly ticket: SpotTicket,
     readonly targetItems: readonly OrderItem[],
-    /** Target total quantity */
+    /** 目标总量 */
     readonly baseQty: Quantity,
-    /** User-entered total quantity */
+    /** 用户录入总量 */
     readonly inputTotalQty: Quantity,
     readonly outcomes: readonly NormalizedOutcome[],
   ) {}
 }
 ```
 
-## Tag Guidance
+## 标签建议
 
-These tags are usually safe and widely understood:
+优先使用通用、稳定的标签：
 
 - `@param`
 - `@returns`
@@ -152,64 +152,64 @@ These tags are usually safe and widely understood:
 - `@see`
 - `@deprecated`
 
-Prefer this when adding a primary explanation:
+需要补充主说明时优先考虑：
 
 - `@description`
 
-Use these only when the codebase or tooling already supports them:
+仅在项目实际工具链或既有风格需要时使用：
 
 - `@remarks`
-- `@default` or `@defaultValue`
+- `@default` 或 `@defaultValue`
 - `@emits`
 
-Choose tags based on:
+选择原则：
 
-- existing project conventions
-- documentation tooling, IDE support, or lint rules
-- whether the tag adds real value instead of just filling space
+- 如果项目已经有稳定约定，就跟随现有约定
+- 如果文档生成工具、IDE 提示或 lint 规则会读取这些标签，按工具要求选
+- 如果没有任何工具或团队约定，不要为了“标签完整”硬塞不必要的标签
 
-## Vue / React Differences
+## Vue / React 差异
 
 ### Vue
 
-- Component block comments can describe responsibility, constraints, and events
-- Use `@emits` only when the project already accepts that pattern
-- Field-level notes near `defineProps` / `defineEmits` are often more stable than a giant component header
+- 组件块注释里可以描述组件职责、约束和事件
+- 只有在项目已经接受这套写法时，再使用 `@emits`
+- `defineProps` / `defineEmits` 附近的字段和事件说明通常比大而全的组件头注释更稳
 
 ### React
 
-- Do not default to `@emits`
-- Document callback props, prop interfaces, and custom hooks instead
-- Put effect timing, controlled vs uncontrolled rules, and side-effect notes near the prop or hook that owns them
+- 默认不要把组件行为写成 `@emits`
+- 更适合在 props 接口、callback props、custom Hook 上记录契约
+- 对副作用、受控/非受控、时序限制的说明，优先贴近对应 prop 或 Hook 返回值
 
-### Hooks And Utilities
+### Hook / 工具函数
 
-- Document input constraints, default behavior, return contracts, and timing semantics such as debounce, throttle, or cancellation
-- Add `@example` only when call order, return shape, or side effects are otherwise easy to misuse
+- 说明输入约束、默认行为、返回契约和取消/防抖/节流等时序语义
+- 如果调用顺序、返回结构或副作用不直观，再补 `@example`
 
 ## TODO / FIXME
 
-- `TODO` is for planned improvements
-- `FIXME` is for known bugs or incorrect behavior
-- Never leave a bare marker. Include at least the reason and expected direction; add owner, condition, or timing when known
+- `TODO` 用于计划中的改进
+- `FIXME` 用于已知错误、缺陷或不正确行为
+- 不要只留空标记，至少补充原因和预期处理方向；如果已知负责人、条件或时间窗口，也可以一并写明
 
 ```ts
-// TODO: Remove the local timezone fallback after the backend standardizes on UTC
-// FIXME: The current regex cannot handle nested parentheses and should be replaced with a state-machine parser
+// TODO: 等后端统一返回 UTC 时间后移除本地时区兜底
+// FIXME: 当前正则无法匹配嵌套括号，需改为状态机解析
 ```
 
-## Quality Bar
+## 质量标准
 
-Good comments usually:
+好的注释通常满足：
 
-- add information the code alone does not reveal
-- stay scoped to the smallest useful location
-- remain true after refactors
-- include examples only when they materially reduce misuse
+- 解释了代码本身看不出来的信息
+- 作用域足够小，贴近真实约束出现的位置
+- 和当前实现保持同步，重构后依然成立
+- 例子只在确实能降低误用风险时出现
 
-Bad comments usually:
+坏的注释通常表现为：
 
-- translate the code into prose
-- use vague phrases such as "process data" or "set state"
-- fall out of sync with current return shapes, timing, or behavior
-- annotate every variable or loop step without adding insight
+- 只是把代码翻译成自然语言
+- 用“处理数据”“设置状态”这类空话
+- 已经过时，和当前返回值、时序或实现不一致
+- 为所有变量和每一行循环都加说明
