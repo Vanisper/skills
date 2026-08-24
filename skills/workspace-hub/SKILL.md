@@ -7,7 +7,7 @@ metadata:
 
 # workspace-hub — 壳工作空间脚手架
 
-把「根壳项目 + projects/ 挂载」模式沉淀为可执行流程。壳仓库只承载文档、规划与约定；真实项目以 clone 或链接挂在 `projects/` 下，git 各自独立。`templates/` 即一处可直接落地的壳骨架参照。
+把「根壳项目 + projects/ 挂载」模式整理成可执行流程。壳仓库只承载文档、规划与约定；真实项目以 clone 或链接挂在 `projects/` 下，git 各自独立。`templates/` 即一处可直接套用的壳骨架参照。
 
 ## 流程总览
 

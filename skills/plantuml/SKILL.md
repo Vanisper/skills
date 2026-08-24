@@ -50,11 +50,11 @@ node scripts/plantuml.mjs text diagram.puml
 - **校验自愈**：脚本对 svg/png/txt 做 magic 校验，遇到广告层 HTML 注入或语法错会非零退出并把响应体当调试通道打印；按 [references/troubleshooting.md](references/troubleshooting.md) 的降级阶梯修。
 - **如实报告**：脚本会打到 stderr——用了哪个 host、源码是否离开本机、写到了哪个文件。
 
-## 何时读哪份 Reference
+## 何时读哪份 reference
 
 - 选后端、自建 server、本地 jar、Kroki POST、隐私取舍 → [backends.md](references/backends.md)
 - 图种语法、最小模板、C4、皮肤主题 → [syntax.md](references/syntax.md)
-- 渲染失败、降级阶梯、ASCII 对齐、PNG 元数据、SVG 落地场景 → [troubleshooting.md](references/troubleshooting.md)
+- 渲染失败、降级阶梯、ASCII 对齐、PNG 元数据、SVG 使用场景 → [troubleshooting.md](references/troubleshooting.md)
 
 ## 目录
 

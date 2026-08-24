@@ -1,13 +1,13 @@
 ---
 name: "git-workflow"
-description: "可复用的 Git 工作流 skill。用于处理 git status、暂存、commit、push、Pull Request、分支合并、回滚、远程仓库和 tag 等操作。commit header 遵循 Conventional Commits：英文 type、可选英文 scope、subject 跟随项目语言偏好；项目锚定共享 commitlint 配置时，长度与 emoji 等细则以配置为准，emoji 用与否还取决于项目风格现状与 git hook 自动处理。"
+description: "可复用的 Git 工作流 skill。用于处理 git status、暂存、commit、push、Pull Request、分支合并、回滚、远程仓库和 tag 等操作。commit header 遵循 Conventional Commits：英文 type、可选英文 scope、subject 跟随项目语言偏好；项目接入了共享 commitlint 配置时，长度与 emoji 等细则以配置为准，emoji 用与否还取决于项目风格现状与 git hook 自动处理。"
 metadata:
   short-description: "Git 操作、提交规范与分支合并"
 ---
 
 # Git Workflow
 
-在需要处理常见 Git 操作的代码仓库或工作区中使用这个 skill。
+处理 git 日常操作——状态与暂存、提交、分支合并、回滚、远程与 tag——的代码仓库或工作区中使用这个 skill。
 
 ## 目标
 
@@ -40,7 +40,7 @@ metadata:
 - 分支名优先使用清晰的英文语义。
 - 除非用户明确要求改写历史，否则不要 force-push。
 
-## Reference Guide
+## 参考文档
 
 - 提交规范：[references/commit.md](references/commit.md)
 - 分支合并与 PR 规范：[references/merge.md](references/merge.md)
@@ -48,7 +48,7 @@ metadata:
 - 远程仓库与 push 规范：[references/remote.md](references/remote.md)
 - tag 与发布标记规范：[references/tags.md](references/tags.md)
 
-## 何时读取哪份 Reference
+## 何时读哪份 reference
 
 - 涉及 commit message、暂存、提交时，读 `commit.md`。
 - 涉及分支合并、PR 时，读 `merge.md`。
@@ -64,7 +64,7 @@ metadata:
 - 默认优先使用当前项目主流的 commit `subject` 语言。如果项目没有明确约定，就跟随主要文档、注释和既有 commit 历史。
 - 如果用户只给了一个大致意图，可以合理推断最小准确的 `type` 和 `scope`。
 
-## Source Rules
+## 来源
 
 这个 skill 参考了：
 
