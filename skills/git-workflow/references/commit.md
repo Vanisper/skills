@@ -40,7 +40,7 @@
 
 不少项目（前端尤多，不限于此）通过 husky / lefthook / simple-git-hooks 等 git hook 工具拦截 commit，其中部分会按 `type` 自动补挂 emoji。手动写 emoji 前先查清 hook 行为（`.husky/`、`package.json` 的 hooks 与 lint-staged 配置、`lefthook.yml` 等）：
 
-- hook 会自动挂 emoji：手动不再挂，交给 hook。手动 emoji 与 hook 挂的相同时，hook 一般能识别并跳过、不会重复；不同时可能叠出两个 emoji。
+- hook 会自动挂 emoji：手动不再挂，交给 hook。手动 emoji 与 hook 挂的相同时，hook 一般能识别并跳过、不会重复（幂等）；不同时可能叠出两个 emoji。
 - 查不清楚时，默认不手动挂，交给 hook 处理。
 - hook 不处理 emoji 的项目，按上面的 emoji 条件式细则与项目风格现状决定。
 

@@ -33,7 +33,7 @@ node scripts/plantuml.mjs render diagram.puml -f svg -o diagram.svg \
 
 ## 本地 plantuml.jar（完全离线）
 
-需 Java 运行时（JRE 11+）。适合敏感内容、离线、或要可靠 `/utxt/` Unicode 框线：
+需 Java 运行时（JRE 11+）。适合敏感内容、与外界完全隔离的气隙（air-gapped）环境、或要可靠 `/utxt/` Unicode 框线：
 
 ```bash
 java -jar plantuml.jar -tsvg  diagram.puml   # 产出 diagram.svg
