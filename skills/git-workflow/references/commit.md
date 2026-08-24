@@ -8,9 +8,9 @@
 
 `<type>[optional scope]!: <subject>`
 
-## Commitlint 约束（项目锚定共享配置时适用）
+## Commitlint 约束（项目接入共享配置时适用）
 
-以下约束描述的是「项目锚定共享 commitlint 配置」时的形态，示例配置为 [schema-store/.commitlintrc.yaml](https://github.com/Vanisper/schema-store/blob/master/.commitlintrc.yaml)；在 Conventional Commits 基础上增加了：
+以下约束描述的是「项目接入了共享 commitlint 配置」时的形态，示例配置为 [schema-store/.commitlintrc.yaml](https://github.com/Vanisper/schema-store/blob/master/.commitlintrc.yaml)；在 Conventional Commits 基础上增加了：
 
 - `type` 必须是英文，并且只能是以下值之一：
   - `feat`
@@ -40,7 +40,7 @@
 
 不少项目（前端尤多，不限于此）通过 husky / lefthook / simple-git-hooks 等 git hook 工具拦截 commit，其中部分会按 `type` 自动补挂 emoji。手动写 emoji 前先查清 hook 行为（`.husky/`、`package.json` 的 hooks 与 lint-staged 配置、`lefthook.yml` 等）：
 
-- hook 会自动挂 emoji：手动不再挂，交给 hook。手动 emoji 与 hook 挂的相同时，hook 一般幂等跳过；不同时可能重复叠加成两个 emoji。
+- hook 会自动挂 emoji：手动不再挂，交给 hook。手动 emoji 与 hook 挂的相同时，hook 一般能识别并跳过、不会重复；不同时可能叠出两个 emoji。
 - 查不清楚时，默认不手动挂，交给 hook 处理。
 - hook 不处理 emoji 的项目，按上面的 emoji 条件式细则与项目风格现状决定。
 
