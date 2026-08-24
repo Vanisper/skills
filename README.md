@@ -22,6 +22,13 @@ skill 清单见下方 [当前 Skills](#当前-skills)。想动手安装再看 [�
 
 Mermaid 不够时用 PlantUML 画复杂图（时序/类/组件/部署/状态/用例/C4）：编码成 server/Kroki URL 取回 SVG/PNG 或 ASCII 文本图，默认零本地 Java。
 
+## 口味声明
+
+这些 skill 沉淀的是作者个人长期约定，其中两处偏好较强，他人安装前请知悉：
+
+- `git-workflow`：commit 规则以 Conventional Commits 为基线；type/scope/长度/emoji 等细则为条件式——项目锚定共享 commitlint 配置（如 [schema-store/.commitlintrc.yaml](https://github.com/Vanisper/schema-store/blob/master/.commitlintrc.yaml)）时以配置为准，emoji 用与否、用哪些取决于用户要求与项目风格现状（含 git hook 自动处理），未采用相关配置的项目按基线与自身惯例执行。
+- `comment-style`：含个人标点与文风细则（如中文注释不以句号结尾、列表项标点规则），属于风格偏好而非通用规范，按项目情况取舍。
+
 ## 安装
 
 以下用 `npx`；习惯 `pnpm` 的把 `npx` 换成 `pnpx` 即可。
