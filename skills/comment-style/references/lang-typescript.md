@@ -7,6 +7,14 @@
 - 需要补充主说明时默认优先 `@description`：此写法面向 VS Code 悬浮提示 / TypeDoc 类工具链，提示更直接。注意经典 jsdoc 生成器（如 jsdoc CLI）会把 `@description` 当作完整描述并覆盖首行摘要，在该类项目里需另行约定。
 - 若项目已统一使用 `@remarks`，延续现有约定，不要在一个项目里混出两套标签体系。
 
+## 域布局与 hover 渲染
+
+VS Code 悬浮提示按 markdown 渲染块注释：相邻行折叠成一段（以空格连接），空行分段。由此：
+
+- title 用 `#` 标题语法时自成段落，副标题紧跟其后不用空行
+- title 不用标题语法时，主副标题之间必须空一行，否则 hover 时两行被连成一行
+- description 域用 `@description` 显式定位，与 title 的分界不依赖空行猜读
+
 ## 示例
 
 ```ts

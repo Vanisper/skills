@@ -39,4 +39,4 @@ pub fn distribute(total: u32, items: &[Item]) -> Vec<u32> {
 - `# Safety`：`unsafe` 函数的安全要求（调用者必须保证什么）。
 - `# Note`、`# Warning`：补充说明或注意事项。
 
-首行一句话摘要，展开说明另起段落。
+首行一句话摘要，展开说明另起段落。rustdoc 同为 markdown 渲染：相邻行折叠成一段（以空格连接）、空行分段，与 JSDoc 同一套机制；rustdoc 首段会成为文档列表页的摘要，title 职责由首段承担，不需要标题语法。
