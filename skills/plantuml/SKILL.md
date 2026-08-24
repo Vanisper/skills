@@ -23,7 +23,7 @@ PlantUML 渲染通常要本地 Java + plantuml.jar，对用户环境要求高。
 # 1. 写源码，如 docs/order-flow.puml（语法见 references/syntax.md）
 # 2. 渲染到源码旁同名 .svg（render 不带 -o 即默认输出到旁边）
 node scripts/plantuml.mjs render docs/order-flow.puml -f svg
-# 3. 源码与图片一起提交；GitHub README 拦 SVG，那种位置用 -f png
+# 3. 源码与图片一起提交；README 引用仓库内相对路径 SVG 可正常显示（issue/PR 拖拽附件等场景不内联，那种位置用 -f png）
 ```
 
 ### 临时分享（聊天 / 一次性，不落盘）
@@ -44,7 +44,7 @@ node scripts/plantuml.mjs text diagram.puml
 
 ## 通用约束
 
-- **格式**：默认 **SVG**（可缩放、不泄露源码）；GitHub README 等拦 SVG 的位置用 **PNG**——但 PlantUML 生成的 PNG 内嵌源码元数据，对外分享前应改用 SVG 或用本地 jar `-nometadata`（详见 [references/troubleshooting.md](references/troubleshooting.md) PNG 元数据部分）。
+- **格式**：默认 **SVG**（可缩放、不泄露源码）。GitHub README 引用仓库内相对路径 SVG 可正常显示；issue/PR 拖拽上传的 SVG 附件不内联、release assets 引用与部分文档平台也不渲染 SVG——这类位置改用 **PNG**，但 PlantUML 生成的 PNG 内嵌源码元数据，对外分享前应改回 SVG 或用本地 jar `-nometadata`（详见 [references/troubleshooting.md](references/troubleshooting.md) PNG 元数据部分）。
 - **ASCII 文本图**：默认走 `/txt/`。`/utxt/`（Unicode 框线）在公共 server 上会被广告层注入 HTML、**不可靠**——要 Unicode 框线用本地 jar `-tutxt` 或自建 server。
 - **隐私红线**：公共 server（plantuml.com / kroki.io）会收到完整源码。含敏感 / 专有信息的图，留档与临时都应切本地后端（`--base` 自建 server、或本地 jar）——**绝不静默改用公共后端**。Kroki 用于大图（免编码 POST）或已有 Kroki 的场景。
 - **校验自愈**：脚本对 svg/png/txt 做 magic 校验，遇到广告层 HTML 注入或语法错会非零退出并把响应体当调试通道打印；按 [references/troubleshooting.md](references/troubleshooting.md) 的降级阶梯修。
@@ -54,7 +54,7 @@ node scripts/plantuml.mjs text diagram.puml
 
 - 选后端、自建 server、本地 jar、Kroki POST、隐私取舍 → [backends.md](references/backends.md)
 - 图种语法、最小模板、C4、皮肤主题 → [syntax.md](references/syntax.md)
-- 渲染失败、降级阶梯、ASCII 对齐、PNG 元数据、GitHub SVG 限制 → [troubleshooting.md](references/troubleshooting.md)
+- 渲染失败、降级阶梯、ASCII 对齐、PNG 元数据、SVG 落地场景 → [troubleshooting.md](references/troubleshooting.md)
 
 ## 目录
 

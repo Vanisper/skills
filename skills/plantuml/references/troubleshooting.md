@@ -27,8 +27,9 @@
 
 ## GitHub / Markdown 渲染
 
-- GitHub README **会拦截 SVG 图片**（安全原因）——要 GitHub 直接渲染就用 PNG：`![图](https://www.plantuml.com/plantuml/png/<encoded>)` 或本地落盘的 `.png`。
-- 非 GitHub 的 wiki / 文档站点通常能渲染 SVG，优先 SVG（可缩放、不泄露源码）。
+- GitHub README 引用**仓库内相对路径**的 SVG 可正常显示（经 raw 路由以 `image/svg+xml` 服务，内嵌脚本被 CSP 沙箱拦截，这就是 GitHub 的安全处理方式）。
+- 不渲染 SVG 的位置：issue/PR 评论**拖拽上传的 SVG 附件**不内联、release assets 引用常失败、部分 wiki / 文档平台不支持——这些位置用 PNG：`![图](https://www.plantuml.com/plantuml/png/<encoded>)` 或本地落盘的 `.png`。
+- 支持 SVG 的位置优先 SVG（可缩放、不泄露源码）。
 
 ## PNG 元数据泄露源码
 
