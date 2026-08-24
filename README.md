@@ -1,6 +1,6 @@
 # Skills
 
-个人维护的 Agent Skills 仓库，收录一批可复用、跨 AI 编码工具的技能。每个 skill 是一份带 metadata 的说明文档（部分带脚本 / 模板资产），供 Claude Code、Codex、Cursor 等支持 Agent Skills 的工具按需加载。
+个人维护的 Agent Skills 仓库，收录一批可复用、跨 AI 编码工具的技能。每个 skill 是一份带 metadata 的说明文档（部分带脚本 / 模板资产），供 Claude Code、Codex、Cursor 等支持 Agent Skills 的工具按需加载。这些 skill 当作**个人经验与方法的说明书**来维护——定位与缘由见 [CONTRIBUTING.md](./CONTRIBUTING.md) 的「skill 的定位」。
 
 skill 清单见下方 [当前 Skills](#当前-skills)。想动手安装再看 [安装](#安装)——安装与分发沿用 [vercel-labs/skills](https://github.com/vercel-labs/skills) 的 `skills` CLI。
 
@@ -24,9 +24,9 @@ Mermaid 不够时用 PlantUML 画复杂图（时序/类/组件/部署/状态/用
 
 ## 口味声明
 
-这些 skill 沉淀的是作者个人长期约定，其中两处偏好较强，他人安装前请知悉：
+这些 skill 来自作者个人长期约定，其中两处偏好较强，他人安装前请知悉：
 
-- `git-workflow`：commit 规则以 Conventional Commits 为基线；type/scope/长度/emoji 等细则为条件式——项目锚定共享 commitlint 配置（如 [schema-store/.commitlintrc.yaml](https://github.com/Vanisper/schema-store/blob/master/.commitlintrc.yaml)）时以配置为准，emoji 用与否、用哪些取决于用户要求与项目风格现状（含 git hook 自动处理），未采用相关配置的项目按基线与自身惯例执行。
+- `git-workflow`：commit 规则以 Conventional Commits 为基线；type/scope/长度/emoji 等细则为条件式——项目接入了共享 commitlint 配置（如 [schema-store/.commitlintrc.yaml](https://github.com/Vanisper/schema-store/blob/master/.commitlintrc.yaml)）时以配置为准，emoji 用与否、用哪些取决于用户要求与项目风格现状（含 git hook 自动处理），未采用相关配置的项目按基线与自身惯例执行。
 - `comment-style`：含个人标点与文风细则（如中文注释不以句号结尾、列表项标点规则），属于风格偏好而非通用规范，按项目情况取舍。
 
 ## 安装
@@ -116,25 +116,13 @@ npx skills add /path/to/skills --skill git-workflow --list
 - `skills/<skill>/<资产目录>/`（可选）
   某些 skill 会带额外资产目录（如 `workspace-hub` 的 `templates/`），用途在该 skill 的 SKILL.md 中登记
 
-## 贡献与新建 Skill
+## 贡献与维护
 
-详细说明见 [CONTRIBUTING.md](./CONTRIBUTING.md)。
+新增 skill 的完整流程（复制模板、frontmatter 与 `openai.yaml` 约定、校验命令）和行文约定见 [CONTRIBUTING.md](./CONTRIBUTING.md)。日常维护只需记住两条：
 
-如果你要新增 skill，推荐流程是：
-
-1. 复制 `skills/skill-template` 到 `skills/<new-skill-name>`
-2. 修改 `SKILL.md` frontmatter 和正文
-3. 按需补充 `agents/openai.yaml` 与 `references/`
-4. 用本地路径执行 `npx skills add /path/to/repo --list` 验证
-
-## 维护约定
-
-- skill id 和目录名保持英文，便于安装与跨工具兼容
-- 文档统一用中文维护，不提供英文翻译（详见 [CONTRIBUTING.md](./CONTRIBUTING.md) 的语言说明）
-- 新增 skill 时，优先放到 `skills/<skill>` 下，并保持主入口精简，把细则拆到 `references/`
-- YAML frontmatter 里的字符串值一律加引号，避免解析失败
+- skill id 和目录名保持英文，文档统一用中文维护
+- 主入口保持精简，细则拆到 `references/`
 
 ## 相关链接
 
-- [vercel-labs/skills](https://github.com/vercel-labs/skills)
-- [Vanisper/skills](https://github.com/Vanisper/skills)
+- [vercel-labs/skills](https://github.com/vercel-labs/skills)——安装与分发沿用的 `skills` CLI 所在仓库
