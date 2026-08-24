@@ -37,7 +37,7 @@ metadata:
 
 ## 参考文档
 
-- 通用规则（何时写、域模型与空行、语境区分、标点、API 契约、TODO）：[references/rules.md](references/rules.md)
+- 通用规则（何时写、注释的构成、语境区分、标点、API 契约、TODO）：[references/rules.md](references/rules.md)
 - 分语言惯例（可插拔，一门语言一个文件）：
   - TypeScript / JavaScript / JSDoc：[references/lang-typescript.md](references/lang-typescript.md)
   - Rust：[references/lang-rust.md](references/lang-rust.md)
