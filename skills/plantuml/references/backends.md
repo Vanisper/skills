@@ -1,6 +1,6 @@
 # 渲染后端
 
-四后端同输出，按敏感度选择；**永不静默降级**，并在结束时如实报告源码是否离开本机（脚本打到 stderr）。
+四个后端产出相同，差别只在源码是否离开本机；按敏感度选择，**永不静默降级**，并在结束时如实报告源码是否离开本机（脚本打到 stderr）。
 
 | 后端 | 需要 | 源码离开本机 | 何时用 |
 | --- | --- | --- | --- |
@@ -31,7 +31,7 @@ node scripts/plantuml.mjs render diagram.puml -f svg -o diagram.svg \
   --base http://localhost:8080/plantuml
 ```
 
-## 本地 plantuml.jar（完全气隙）
+## 本地 plantuml.jar（完全离线）
 
 需 Java 运行时（JRE 11+）。适合敏感内容、离线、或要可靠 `/utxt/` Unicode 框线：
 

@@ -29,6 +29,7 @@ metadata:
 
 本仓库的 skill 文档统一用中文维护，不提供英文翻译（出于维护成本，非语言偏好）；skill id、目录名、`name` 保持英文以兼容 `skills` CLI。完整说明见 [CONTRIBUTING.md](../../CONTRIBUTING.md)。
 
-## Read More
+## 参考
 
 - 新建 skill 清单：[references/checklist.md](references/checklist.md)
+- 定位与行文约定：[CONTRIBUTING.md](../../CONTRIBUTING.md)（skill 的定位、行文约定两节）
