@@ -8,9 +8,9 @@
 
 `<type>[optional scope]!: <subject>`
 
-## Commitlint 约束（来自 schema-store）
+## Commitlint 约束（项目锚定共享配置时适用）
 
-这些约束来自共享配置 [schema-store/.commitlintrc.yaml](https://github.com/Vanisper/schema-store/blob/master/.commitlintrc.yaml)，在 Conventional Commits 基础上增加了：
+以下约束描述的是「项目锚定共享 commitlint 配置」时的形态，示例配置为 [schema-store/.commitlintrc.yaml](https://github.com/Vanisper/schema-store/blob/master/.commitlintrc.yaml)；在 Conventional Commits 基础上增加了：
 
 - `type` 必须是英文，并且只能是以下值之一：
   - `feat`
@@ -31,12 +31,18 @@
 - `subject` 的语言应跟随当前项目的语言偏好，并清楚描述实际改动。
 - 如果项目没有明确约定，就跟随主要文档、注释和既有 commit 历史中的主流语言。
 - 完整提交头长度应控制在 72 个字符以内。此 72 来自共享配置的 cz-git prompt（`maxHeaderLength: 72`）；直接 `git commit -m` 绕过 cz-git 时，commitlint 继承 config-conventional 的 `header-max-length` 默认值 100，只在 100 处才报错。此 72 基于 UTF-16 码元计数（中文算 1、多数 emoji 算 2），不是终端里的显示宽度。
-- `emoji` 可选。共享配置已开启 `useEmoji: true`、`emojiAlign: left`，默认放在 `type` 之前。
-- 如果使用 `emoji`，以下两种写法都可以：
-  - 放在提交头最前面（与配置的 `emojiAlign: left` 一致），例如 `🚀 feat(wallet): 新增企业开户入口`
-  - 放在冒号后的 `subject` 开头，例如 `feat(wallet): 🚀 新增企业开户入口`
-- 各 `type` 对应的 emoji 以 [commitlintrc](https://github.com/Vanisper/schema-store/blob/master/.commitlintrc.yaml) 的 per-type 映射为准（如 `feat`→🚀、`fix`→🩹、`docs`→📖、`refactor`→💅），不要随意混用 gitmoji 风格。
-- 同一个仓库内尽量保持 `emoji` 风格一致。
+- `emoji` 用与否、用哪些，前提始终是用户要求与项目风格现状：项目没有该风格就保持无 emoji，已有该风格则遵循现状。以下细则仅在项目已采用 emoji 风格（如共享配置开启 `useEmoji: true`）时适用。
+- 默认放在提交头最前面（与配置的 `emojiAlign: left` 一致），例如 `🚀 feat(wallet): 新增企业开户入口`；放在冒号后的 `subject` 开头也可以，例如 `feat(wallet): 🚀 新增企业开户入口`，两种写法在同一个仓库内保持一致。
+- 各 `type` 对应的 emoji 以项目所用 commitlint 配置的 per-type 映射为准（如共享配置 `feat`→🚀、`fix`→🩹、`docs`→📖、`refactor`→💅），不要随意混用 gitmoji 风格。
+- 手动写 emoji 前先调查 git hook 是否会自动处理，见下节。
+
+## git hook 自动挂 emoji 的调查
+
+不少项目（前端尤多，不限于此）通过 husky / lefthook / simple-git-hooks 等 git hook 工具拦截 commit，其中部分会按 `type` 自动补挂 emoji。手动写 emoji 前先查清 hook 行为（`.husky/`、`package.json` 的 hooks 与 lint-staged 配置、`lefthook.yml` 等）：
+
+- hook 会自动挂 emoji：手动不再挂，交给 hook。手动 emoji 与 hook 挂的相同时，hook 一般幂等跳过；不同时可能重复叠加成两个 emoji。
+- 查不清楚时，默认不手动挂，交给 hook 处理。
+- hook 不处理 emoji 的项目，按上面的 emoji 条件式细则与项目风格现状决定。
 
 ## 编写建议
 
