@@ -14,6 +14,8 @@ skills/<skill-name>/
     └── checklist.md
 ```
 
+- `references/` 可按需再分子目录（如 comment-style 的 `lang/` 按语言归组），校验脚本递归识别；链接与登记规则不变。
+
 - 不要把 skill 放在仓库根目录，否则 `skills` CLI 发现不到。
 - 额外资产目录（如 `templates/`、`assets/`）可按需携带，但须在 `SKILL.md` 登记用途。
 
