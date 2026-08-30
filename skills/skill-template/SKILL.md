@@ -33,10 +33,6 @@ metadata:
 - {{意图：照着搭目录、对齐正文骨架}} → [structure.md](references/structure.md)
 - {{意图：提交前收尾自检}} → [checklist.md](references/checklist.md)
 
-## 语言说明
-
-本仓库的 skill 文档统一用中文维护，不提供英文翻译（维护成本取舍，非语言偏好）；skill id、目录名、`name` 保持英文以兼容 `skills` CLI。完整约定见 [CONTRIBUTING.md](../../CONTRIBUTING.md) 的「行文约定」「语言说明」两节。
-
 ## 目录
 
 - `references/` — 按意图分流的细则（当前：`structure.md`、`checklist.md`）。
