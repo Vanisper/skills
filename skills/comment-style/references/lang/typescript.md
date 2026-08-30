@@ -75,7 +75,7 @@ export class Transformer {
 
 **层 1 规范依据**（事实，出处见尾部）：
 
-- JSDoc 与 TSDoc 是两套标准：`@description`、`@default`、`@fires`（`@emits` 为其同义词）属 JSDoc；`@remarks`、`@defaultValue` 属 TSDoc（TSDoc 还把标签分为 core / extended / discretionary 三级）
+- JSDoc 与 TSDoc 是两套标准：`@description`、`@default`、`@fires` 属 JSDoc；`@remarks`、`@defaultValue` 属 TSDoc（TSDoc 还把标签分为 core / extended / discretionary 三级）
 - `@param`、`@returns`、`@example`、`@throws`、`@see`、`@deprecated` 两套标准都有，跨项目最稳妥
 
 **层 2 工具链现实**（可实测验证）：
@@ -96,8 +96,9 @@ export class Transformer {
 
 Vue：
 
-- 面向使用者：把 JSDoc 写在 `defineProps` 的 interface 成员上，使用方 hover 该 prop 时显示
-- 面向维护者：`<script setup>` 顶部可用盒式局域头对组件职责做整体叙述（见 [rules.md](../rules.md)「文件头与局域头注释」）
+- 模板里悬停组件标签的组件级说明，是 vue-language-tools 的 **rich hover**（[PR #5881](https://github.com/vuejs/language-tools/pull/5881)）；实验特性，需开启 `vue.hover.rich`
+- skill **不据此立规则**：不要求开启、不依赖它写注释
+- 面向使用者的可靠载体仍是成员级 `defineProps` JSDoc（写在 interface 成员上，使用方 hover 该 prop 时显示）；`<script setup>` 顶部盒式局域头面向维护者（见 [rules.md](../rules.md)「文件头与局域头注释」）
 
 React：
 
@@ -105,6 +106,7 @@ React：
 
 ## 规范依据
 
-- JSDoc 标签参考：<https://jsdoc.app>（`@description`、`@default`、`@fires`/`@emits` 定义）
+- JSDoc 标签参考：<https://jsdoc.app>（`@description`、`@default`、`@fires` 定义）
 - TSDoc 标准：<https://tsdoc.org>（`@remarks`、`@defaultValue`，标签三级分类）
+- vue-language-tools rich hover：<https://github.com/vuejs/language-tools/pull/5881>（实验特性、`vue.hover.rich`）
 - 查证日期：2026-08；结论若与工具新版本行为冲突，以实测为准并回来更新本节
