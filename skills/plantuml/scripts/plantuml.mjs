@@ -19,17 +19,18 @@
 
 import { deflateRawSync } from 'node:zlib';
 import { readFileSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 // PlantUML 自定义 base64 字母表（Kroki 的 /plantuml/ 端点同样用这套，与标准 base64 不可互换）：
 // 数字在前、-_ 取代 +/、无 = 填充。输出全部 URL-path-safe。
 const PLANTUML_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_';
 const DEFAULT_PLANTUML_BASE = 'https://www.plantuml.com/plantuml';
 const DEFAULT_KROKI_BASE = 'https://kroki.io';
-const FORMATS = new Set(['svg', 'png', 'txt', 'utxt', 'pdf', 'eps', 'latex']);
+export const FORMATS = new Set(['svg', 'png', 'txt', 'utxt', 'pdf', 'eps', 'latex']);
 
 const enc6 = (b) => PLANTUML_ALPHABET[b & 0x3f];
 
-function plantumlBase64(buf) {
+export function plantumlBase64(buf) {
   let out = '';
   for (let i = 0; i < buf.length; i += 3) {
     const b1 = buf[i];
@@ -45,11 +46,11 @@ function plantumlBase64(buf) {
 }
 
 // 编码：UTF-8 → 原始 deflate（无 zlib 头 / adler）→ PlantUML 自定义 base64。官方 server 与 Kroki 通用
-const encode = (text) => plantumlBase64(deflateRawSync(Buffer.from(text, 'utf8')));
+export const encode = (text) => plantumlBase64(deflateRawSync(Buffer.from(text, 'utf8')));
 // ~h 无压缩十六进制：仅极小图 / 调试，URL 约 2 倍源码长度
-const encodeHex = (text) => '~h' + Buffer.from(text, 'utf8').toString('hex');
+export const encodeHex = (text) => '~h' + Buffer.from(text, 'utf8').toString('hex');
 
-function buildUrl(source, format, backend, base, hex) {
+export function buildUrl(source, format, backend, base, hex) {
   if (backend === 'kroki' && hex) {
     process.stderr.write('[plantuml] --hex 仅 plantuml 后端可用，kroki 不支持 ~h 编码\n');
     process.exit(2);
@@ -68,7 +69,7 @@ const defaultOut = (file, format) => {
 };
 
 // magic 校验：防止把广告层 HTML / 错误页当成功产物落盘
-function validate(format, body) {
+export function validate(format, body) {
   const head = body.subarray(0, 200).toString('utf8');
   const looksHtml = /^\s*<(?:!DOCTYPE|html|head|script)/i.test(head) || head.includes('<html');
   if (format === 'svg') return (head.trimStart().startsWith('<svg') || head.trimStart().startsWith('<?xml')) && !looksHtml;
@@ -191,7 +192,10 @@ async function main() {
   }
 }
 
-main().catch((e) => {
-  process.stderr.write(`[plantuml] ${e.message}\n`);
-  process.exit(1);
-});
+// CLI 入口：仅当作为主模块直接运行时执行，import 时不触发（便于测试）。
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  main().catch((e) => {
+    process.stderr.write(`[plantuml] ${e.message}\n`);
+    process.exit(1);
+  });
+}
