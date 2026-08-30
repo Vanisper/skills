@@ -8,7 +8,7 @@ skill 清单见下方 [当前 Skills](#当前-skills)。想动手安装再看 [�
 
 ### `comment-style`
 
-代码注释与 API 文档规范：判断是否需要注释、选注释语言、写 why-focused 注释、为导出 API 补 JSDoc/TSDoc，以及清理 TODO/FIXME（语言无关，覆盖 TS/JS/Vue/React/Rust/Javadoc 等）。
+代码注释与 API 文档规范：以读者理解成本权衡注释去留（纠偏「零注释 / 只写对外 API」的默认倾向）、选注释语言、按域模型组织 API 文档注释，以及清理 TODO/FIXME。通用规则语言无关，分语言惯例覆盖 TS/JS/Vue/React、Python、Go、Rust、Java、Kotlin、C#、C/C++、PHP、Shell（每门语言附规范依据出处）。
 
 ### `git-workflow`
 
