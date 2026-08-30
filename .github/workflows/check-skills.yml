@@ -13,5 +13,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: 语法闸门（对全部 .mjs 执行 node --check）
+        run: |
+          set -euo pipefail
+          fail=0
+          for f in $(git ls-files '*.mjs'); do
+            node --check "$f" || { echo "FAIL $f"; fail=1; }
+          done
+          exit $fail
       - name: 结构与一致性校验
         run: node scripts/check-skills.mjs
+      - name: 单元测试
+        run: node --test
+      - name: 本地发现冒烟（CI 下非交互）
+        # skills CLI 检测到 CI/agent 环境即非交互运行，只做本地发现，不安装；断言退出 0。
+        run: npx -y skills add . --list
