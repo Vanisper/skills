@@ -94,14 +94,14 @@ npx skills add /path/to/skills --skill git-workflow --list
 
 ### `skill-template`
 
-用于新建 skill 的内部模板，主要作用是：
+用于新建 skill 的内部「黄金样板」，主要作用是：
 
-- 提供标准目录结构示例
-- 演示 `SKILL.md`、`agents/openai.yaml`、`references/` 的最小组合
-- 演示 `references/` 的组织方式
-- 演示 `metadata.internal: true` 的内部模板写法
+- 提供理想的目录结构与 `SKILL.md` 正文骨架（填空式 `{{...}}` 占位）
+- 演示 `references/` 按意图分流，并在「何时读哪份 reference」登记映射
+- 演示 `SKILL.md`、`agents/openai.yaml`、`references/` 的组合与一致性约定
+- 演示 `metadata.internal: true` 的内部 skill 写法
 
-这个模板默认不会出现在普通 `--list` 结果中。
+复制它得到的结构复制后即可通过 `node scripts/check-skills.mjs`。这个模板默认不会出现在普通 `--list` 结果中。
 
 ## 仓库结构
 
