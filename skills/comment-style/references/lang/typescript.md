@@ -1,31 +1,33 @@
 # TypeScript / JavaScript / JSDoc
 
-## 块注释与标签
+## 块注释与域布局
 
 - 块注释用 `/** */`；首导出符号须单独写 JSDoc，避免文件级注释被误挂到第一个导出。
-- 摘要写在首行，补充说明用 `@description`；摘要与 `@description` 之间空一行。
-- 需要补充主说明时默认优先 `@description`：此写法面向 VS Code 悬浮提示 / TypeDoc 类工具链，提示更直接。注意经典 jsdoc 生成器（如 jsdoc CLI）会把 `@description` 当作完整描述并覆盖首行摘要，在该类项目里需另行约定。
-- 若项目已统一使用 `@remarks`，延续现有约定，不要在一个项目里混出两套标签体系。
-
-## 域布局与 hover 渲染
+- 按域模型组织（title / description / signature / example），**域之间空一行**，构成见 [rules.md](../rules.md)「注释的构成（域模型）」。
+- title 域可用 markdown 标题语法，层级随符号从属关系：类 / 接口 / 导出函数等顶层符号可用 `#`，方法、属性等成员用 `##` 或 `###`（具体级别是观感取舍，项目内一致即可）。
 
 VS Code 悬浮提示按 markdown 渲染块注释：相邻行折叠成一段（以空格连接），空行分段。由此：
 
-- title 用 `#` 标题语法时自成段落，副标题紧跟其后不用空行
+- title 用标题语法时自成段落，下一行可直接续写辅助描述，不会粘连
 - title 不用标题语法时，主副标题之间必须空一行，否则 hover 时两行被连成一行
 - description 域用 `@description` 显式定位，与 title 的分界不依赖空行猜读
 
 ## 示例
 
+顶层导出函数（标题域用 `#`，也可省略标题语法）：
+
 ```ts
 /**
- * 按权重分配数量到目标项
+ * # 按权重分配数量到目标项
+ *
  * @description
  * - 权重为 0 的项自动跳过
  * - 末项承担余量，保证总量守恒
+ *
  * @param total 待分配总量
  * @param items 目标项数组
  * @returns 顺序与输入一致的分配结果
+ *
  * @example
  * ```ts
  * distribute(100, [
@@ -39,22 +41,79 @@ export function distribute(total: number, items: Item[]): number[] {
 }
 ```
 
-## 标签选择
+类与成员的层级变体（类用 `#`、方法用 `###` 属合法观感取舍）：
 
-下列标签分属不同文档标准或框架，按项目实际工具链选用，不要一刀切：
+```ts
+/**
+ * # 转换器
+ */
+export class Transformer {
+  /**
+   * ### 从 `JSON` 转换到当前类的对象
+   *
+   * @description 会自动进行数据别名转换
+   *
+   * @param json `JSON`
+   */
+  static fromJson<T extends Transformer>(json: IJson = {}): T {
+    // ...
+  }
+}
+```
 
-- `@remarks`：TSDoc 标准标签（VS Code 悬浮提示、TypeDoc 支持），经典 jsdoc 不识别；与 `@description` 同属「补充说明」，同一项目只用一套
-- `@default` / `@defaultValue`：两者同义但分属两个标准——`@default` 是 JSDoc 标签（值当代码字面量呈现，可自动探测简单字面量），`@defaultValue` 是 TSDoc 标签（内容当 markdown，TypeDoc 首选）；按项目文档工具选用。默认值权威来源仍是代码本身，仅在默认值不直观时才标注
-- `@emits`：标准 JSDoc 中 `@fires` 的同义词（由 JSDoc issue #324 引入）；Vue 生态惯用 `@emits` 记录组件事件，React 不套用事件语义，改记 props / callback / Hook 契约
+「使用向」注释（组件、对外库）可用更丰富的 markdown——链接、`***` 分隔线等，hover 原样渲染：
 
-选择原则：
+```ts
+/**
+ * 视图容器，和 div 类似，用于包裹各种元素内容
+ *
+ * 包裹文字建议使用 text
+ * ***
+ * [👉 组件文档](https://example.com/docs/view)
+ * |
+ * [使用说明](https://example.com/guide)
+ */
+```
 
-- 如果项目已经有稳定约定，就跟随现有约定
-- 如果项目在用 TypeDoc，优先用 `@description` / `@remarks` / `@defaultValue` 等 TSDoc 标签
-- 如果项目在用经典 jsdoc 生成器，避免 `@description` 覆盖首行摘要的陷阱，用 `@default` 而非 `@defaultValue`
-- Vue 项目可自然用 `@emits`，React 项目记 props / callback / Hook 契约
+## 标签选择（按四层裁决归位）
+
+**层 1 规范依据**（事实，出处见尾部）：
+
+- JSDoc 与 TSDoc 是两套标准：`@description`、`@default`、`@fires`（`@emits` 为其同义词）属 JSDoc；`@remarks`、`@defaultValue` 属 TSDoc（TSDoc 还把标签分为 core / extended / discretionary 三级）
+- `@param`、`@returns`、`@example`、`@throws`、`@see`、`@deprecated` 两套标准都有，跨项目最稳妥
+
+**层 2 工具链现实**（可实测验证）：
+
+- 经典 jsdoc CLI 会把 `@description` 当作完整描述并**覆盖首行摘要**；VS Code 悬浮提示 / TypeDoc 则把两者都渲染
+- `@default` 的值当代码字面量呈现（jsdoc 可自动探测简单字面量）；`@defaultValue` 的内容当 markdown（TypeDoc 首选）
+
+**层 3 项目现状**：
+
+- 已有稳定约定就跟随；`@description` 与 `@remarks` 同属「补充说明」，一个项目只用一套
+- 项目用 TypeDoc → 优先 TSDoc 标签；项目用经典 jsdoc 生成器 → 避开 `@description` 覆盖陷阱、用 `@default`
+
+**层 4 个人口味**（显式标注，他人可取舍）：
+
+- 本仓库作者偏好用 `@description` 显式标记 description 域（面向 VS Code hover 的直接性）；默认值权威来源是代码本身，仅在不直观时补默认值标签
 
 ## Vue / React 差异
 
-- **Vue**：组件事件记 `@emits`、Props 记 `@prop` 或 `defineProps` 注释、`computed` / `ref` 优先命名自解释。
-- **React**：Props 记 interface 注释、callback 记 JSDoc、Hook 返回值和契约记在 Hook 的块注释里。不要把 React 组件的 props callback 套用 Vue 的 `@emits` 语义。
+Vue（含 IDE hover 的已验证现状）：
+
+- **成员级（稳定）**：JSDoc 写在 `defineProps` 的 interface 成员上，使用方 hover 该 prop 时显示——长期稳定支持
+- **组件级（实验）**：模板中悬停组件标签显示组件说明与 props 表格，是 vue-language-tools 的 rich hover 特性（[PR #5881](https://github.com/vuejs/language-tools/pull/5881)），需手动开启 `vue.hover.rich`，截至查证日期仍标注 experimental——skill 不据此立规则，跟随项目实测
+- **`defineEmits` 的 JSDoc 受 TypeScript 限制不被 hover 支持**；事件说明可写在 props 的 `onX` 回调成员上，或放组件文档
+- `<script setup>` 顶部可用盒式局域头对组件职责做整体叙述（见 [rules.md](../rules.md)「文件头与局域头注释」），它面向维护者；面向使用者的描述以 props 成员级 JSDoc 为可靠载体
+- `@emits` 是 JSDoc 中 `@fires` 的同义词，Vue 生态惯用它记录组件事件
+
+React：
+
+- Props 记 interface 注释、callback 记 JSDoc、Hook 返回值和契约记在 Hook 的块注释里
+- 不套用 Vue 的 `@emits` 事件语义，改记 props / callback / Hook 契约
+
+## 规范依据
+
+- JSDoc 标签参考：<https://jsdoc.app>（`@description`、`@default`、`@fires`/`@emits` 定义）
+- TSDoc 标准：<https://tsdoc.org>（`@remarks`、`@defaultValue`，标签三级分类）
+- vue-language-tools rich hover：<https://github.com/vuejs/language-tools/pull/5881>（组件级 hover 为实验特性、`vue.hover.rich` 开关）；defineEmits hover 限制见 <https://github.com/vuejs/language-tools/issues/1894>
+- 查证日期：2026-08；结论若与工具新版本行为冲突，以实测为准并回来更新本节

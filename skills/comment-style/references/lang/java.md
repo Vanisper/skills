@@ -7,6 +7,13 @@
 - `<li>` 可不闭合，但 `<ul>` 应闭合。
 - 首行摘要是 Javadoc 的概要句，只写一句。
 
+## 域模型移植性
+
+- title 域 → 首行概要句（Javadoc 以第一句为 summary，进入索引页）
+- description 域 → `<p>` 开启的后续段落；标题需求用 `<h2>` 等块级 HTML 标签（成员上少见，接口/类级偶用）
+- signature 域 → `@param`、`@return`、`@throws`
+- example 域 → `<pre>{@code ...}</pre>` 或 JDK 23 markdown 注释中的代码块
+
 ## 示例
 
 ```java
@@ -41,3 +48,10 @@ public List<Integer> distribute(int total, List<Item> items) {
 - 空行会被折叠——如果想换行，用 `<p>` 开启新段落。
 - 列表不会自动识别，必须显式 `<ul>` / `<li>`。
 - HTML 标签可以不闭合（`<li>` 常不闭合），但 `<ul>` / `<ol>` 应闭合以保证结构完整。
+
+## 规范依据
+
+- Documentation Comment Specification for the Standard Doclet：<https://docs.oracle.com/en/java/javase/21/docs/specs/javadoc/doc-comment-spec.html>（标签定义、首句 summary）
+- How to Write Doc Comments（Oracle 风格指南）：<https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html>
+- JEP 467 Markdown Documentation Comments：<https://openjdk.org/jeps/467>
+- 查证日期：2026-08
