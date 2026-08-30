@@ -1,6 +1,6 @@
 # 渲染后端
 
-四个后端产出相同，差别只在源码是否离开本机；按敏感度选择，**永不静默降级**，并在结束时如实报告源码是否离开本机（脚本打到 stderr）。
+四个后端的 **GET 编码路径相同**（官方 server / 自建 server / Kroki GET 共用 PlantUML 自定义编码），但**能力并不相同**：公共 `/utxt/` 会被广告层注入、公共 server 上 PDF 不可靠、PNG `-nometadata` 只有本地 jar 能去元数据。按敏感度与所需能力选择，**永不静默降级**，并在结束时如实报告源码是否离开本机（脚本打到 stderr）。
 
 | 后端 | 需要 | 源码离开本机 | 何时用 |
 | --- | --- | --- | --- |
@@ -23,12 +23,19 @@ node scripts/plantuml.mjs text   diagram.puml                  # ASCII 文本图
 
 ## 自建 PlantUML server（隐私 / 离线）
 
-官方 Docker 镜像，URL 形态与公共 server 完全一致，只换 base：
+官方 Docker 镜像 `plantuml/plantuml-server:jetty` 的 `BASE_URL` 默认为 `ROOT`，监听 `http://localhost:8080`（没有 `/plantuml` 前缀）：
 
 ```bash
 docker run -d -p 8080:8080 plantuml/plantuml-server:jetty
 node scripts/plantuml.mjs render diagram.puml -f svg -o diagram.svg \
-  --base http://localhost:8080/plantuml
+  --base http://localhost:8080
+```
+
+`/plantuml` 前缀用于 `mvn jetty:run`，或 Docker 启动时设置 `BASE_URL=plantuml`：
+
+```bash
+docker run -d -p 8080:8080 -e BASE_URL=plantuml plantuml/plantuml-server:jetty
+# 此时 --base http://localhost:8080/plantuml
 ```
 
 ## 本地 plantuml.jar（完全离线）
