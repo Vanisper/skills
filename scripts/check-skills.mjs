@@ -5,6 +5,10 @@
 //        frontmatter / openai.yaml 不含超出解析器支持子集的行（列表、块标量等会显式报错，不静默跳过）；
 //        有 agents/openai.yaml；SKILL.md 的 metadata.short-description
 //        与 openai.yaml 的 interface.short_description 文本一致；
+//        SKILL.md 引用的 references/ 与 scripts/ 相对链接目标存在；
+//        openai.yaml 的 policy.allow_implicit_invocation 与 metadata.internal 配套；
+//        openai.yaml 的 interface.default_prompt 含 $<skill-name> 占位、display_name 非空；
+//        references/ 下无未被 SKILL.md 登记的孤儿文件；
 //        非 internal skill 须登记到 README「当前 Skills」、internal 不应出现；
 //        README 列出的 skill 须有对应目录。
 
@@ -16,15 +20,10 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SKILLS_DIR = join(ROOT, 'skills');
 const README = join(ROOT, 'README.md');
 
-const failures = [];
-const log = (mark, msg) => console.log(`  ${mark}  ${msg}`);
-const ok = (m) => log('ok  ', m);
-const fail = (m) => { failures.push(m); log('FAIL', m); };
-
 // 极简 YAML 子集解析：顶层 key: value，以及一层嵌套 mapping（metadata / interface / policy）。
 // 超出子集的行（列表项、块标量 > / |、无 key 的裸文本、孤儿缩进行）记入 bad，
 // 由主流程报错——宁可显式失败，不可静默漏检。
-function parseYamlSubset(text) {
+export function parseYamlSubset(text) {
   const top = {};
   const nested = {};
   const bad = [];
@@ -59,7 +58,7 @@ function parseYamlSubset(text) {
   return { top, nested, bad };
 }
 
-function stripValue(v) {
+export function stripValue(v) {
   const s = v.trim();
   if ((s.startsWith('"') && s.endsWith('"')) || (s.startsWith("'") && s.endsWith("'"))) {
     return s.slice(1, -1);
@@ -68,76 +67,155 @@ function stripValue(v) {
 }
 
 // 块标量指示符（>/| 开头）返回 null，表示不支持
-function scalarValue(v) {
+export function scalarValue(v) {
   const s = stripValue(v);
   return /^[>|][+-]?\d*$/.test(s) ? null : s;
 }
 
-function readFrontmatter(filePath) {
+export function readFrontmatter(filePath) {
   const text = readFileSync(filePath, 'utf8');
   const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   return m ? parseYamlSubset(m[1]) : null;
 }
 
-function readReadmeCurrentSkills() {
+export function readReadmeCurrentSkills() {
   const text = readFileSync(README, 'utf8');
   const section = text.match(/## 当前 Skills\r?\n([\s\S]*?)(\r?\n## |$)/);
   if (!section) return [];
   return [...section[1].matchAll(/### `([a-z0-9-]+)`/g)].map((m) => m[1]);
 }
 
-const skillDirs = readdirSync(SKILLS_DIR)
-  .map((d) => join(SKILLS_DIR, d))
-  .filter((p) => statSync(p).isDirectory());
-const readmeSkills = readReadmeCurrentSkills();
+// 从 SKILL.md 正文抽取指向 references/ 或 scripts/ 的 markdown 相对链接目标（去掉 #锚点）。
+export function extractRelLinks(text) {
+  const links = [];
+  for (const m of text.matchAll(/\]\((references\/[^)\s]+|scripts\/[^)\s]+)\)/g)) {
+    links.push(m[1].split('#')[0]);
+  }
+  return links;
+}
 
-for (const dir of skillDirs) {
-  const name = basename(dir);
-  console.log(`\n• ${name}`);
+// 递归列出目录下的文件，返回相对 dir 的路径（用 / 分隔）。目录不存在时返回空数组。
+export function walkFiles(dir) {
+  if (!existsSync(dir)) return [];
+  const out = [];
+  for (const entry of readdirSync(dir)) {
+    const p = join(dir, entry);
+    if (statSync(p).isDirectory()) out.push(...walkFiles(p).map((r) => `${entry}/${r}`));
+    else out.push(entry);
+  }
+  return out;
+}
 
-  const skillMd = join(dir, 'SKILL.md');
-  if (!existsSync(skillMd)) { fail(`${name}: 缺 SKILL.md`); continue; }
-  const fm = readFrontmatter(skillMd);
-  if (!fm) { fail(`${name}: SKILL.md frontmatter 不可解析`); continue; }
+export function checkSkills() {
+  const failures = [];
+  const log = (mark, msg) => console.log(`  ${mark}  ${msg}`);
+  const ok = (m) => log('ok  ', m);
+  const fail = (m) => { failures.push(m); log('FAIL', m); };
 
-  if (fm.bad.length) fail(`${name}: SKILL.md frontmatter 含无法解析的行（改写为支持的 key: value 子集）:\n        ${fm.bad.join('\n        ')}`);
+  const skillDirs = readdirSync(SKILLS_DIR)
+    .map((d) => join(SKILLS_DIR, d))
+    .filter((p) => statSync(p).isDirectory());
+  const readmeSkills = readReadmeCurrentSkills();
 
-  const fmNameValue = fm.top.name ?? null;
-  if (!fmNameValue) fail(`${name}: frontmatter 缺 name`);
-  else if (!/^[a-z][a-z0-9-]*$/.test(fmNameValue)) fail(`${name}: name "${fmNameValue}" 不合规（小写字母与连字符）`);
-  else ok(`name = ${fmNameValue}`);
+  for (const dir of skillDirs) {
+    const name = basename(dir);
+    console.log(`\n• ${name}`);
 
-  if (!fm.top.description) fail(`${name}: frontmatter 缺 description（参与 skill 发现，必填）`);
+    const skillMd = join(dir, 'SKILL.md');
+    if (!existsSync(skillMd)) { fail(`${name}: 缺 SKILL.md`); continue; }
+    const skillText = readFileSync(skillMd, 'utf8');
+    const fm = readFrontmatter(skillMd);
+    if (!fm) { fail(`${name}: SKILL.md frontmatter 不可解析`); continue; }
 
-  const meta = fm.nested.metadata || {};
-  const internal = meta.internal === true || meta.internal === 'true';
-  const shortDesc = meta['short-description'];
+    if (fm.bad.length) fail(`${name}: SKILL.md frontmatter 含无法解析的行（改写为支持的 key: value 子集）:\n        ${fm.bad.join('\n        ')}`);
 
-  const openai = join(dir, 'agents/openai.yaml');
-  if (!existsSync(openai)) {
-    fail(`${name}: 缺 agents/openai.yaml`);
-  } else {
-    const oai = parseYamlSubset(readFileSync(openai, 'utf8'));
-    if (oai.bad.length) fail(`${name}: openai.yaml 含无法解析的行:\n        ${oai.bad.join('\n        ')}`);
-    const oaiShort = oai.nested.interface?.short_description;
-    if (!shortDesc) fail(`${name}: SKILL.md 缺 metadata.short-description`);
-    else if (!oaiShort) fail(`${name}: openai.yaml 缺 interface.short_description`);
-    else if (shortDesc !== oaiShort) {
-      fail(`${name}: short-description 不一致\n        SKILL.md    : ${shortDesc}\n        openai.yaml : ${oaiShort}`);
+    const fmNameValue = fm.top.name ?? null;
+    if (!fmNameValue) fail(`${name}: frontmatter 缺 name`);
+    else if (!/^[a-z][a-z0-9-]*$/.test(fmNameValue)) fail(`${name}: name "${fmNameValue}" 不合规（小写字母与连字符）`);
+    else ok(`name = ${fmNameValue}`);
+
+    if (!fm.top.description) fail(`${name}: frontmatter 缺 description（参与 skill 发现，必填）`);
+
+    const meta = fm.nested.metadata || {};
+    const internal = meta.internal === true || meta.internal === 'true';
+    const shortDesc = meta['short-description'];
+
+    // SKILL.md 引用的 references/ 与 scripts/ 相对链接必须存在（守护「何时读哪份 reference」契约）。
+    const relLinks = [...new Set(extractRelLinks(skillText))];
+    const missing = relLinks.filter((rel) => !existsSync(join(dir, rel)));
+    if (missing.length) fail(`${name}: SKILL.md 引用的相对链接目标不存在:\n        ${missing.join('\n        ')}`);
+    else if (relLinks.length) ok(`references/scripts 链接均存在（${relLinks.length}）`);
+
+    // references/ 下不应有从未被 SKILL.md 登记的孤儿文件。
+    const refFiles = walkFiles(join(dir, 'references')).map((r) => `references/${r}`);
+    const orphans = refFiles.filter((rel) => !skillText.includes(rel));
+    if (orphans.length) fail(`${name}: references/ 存在未被 SKILL.md 登记的孤儿文件:\n        ${orphans.join('\n        ')}`);
+
+    const openai = join(dir, 'agents/openai.yaml');
+    if (!existsSync(openai)) {
+      fail(`${name}: 缺 agents/openai.yaml`);
     } else {
-      ok('short-description 两处一致');
+      const oai = parseYamlSubset(readFileSync(openai, 'utf8'));
+      if (oai.bad.length) fail(`${name}: openai.yaml 含无法解析的行:\n        ${oai.bad.join('\n        ')}`);
+      const iface = oai.nested.interface || {};
+      const policy = oai.nested.policy || {};
+
+      const oaiShort = iface.short_description;
+      if (!shortDesc) fail(`${name}: SKILL.md 缺 metadata.short-description`);
+      else if (!oaiShort) fail(`${name}: openai.yaml 缺 interface.short_description`);
+      else if (shortDesc !== oaiShort) {
+        fail(`${name}: short-description 不一致\n        SKILL.md    : ${shortDesc}\n        openai.yaml : ${oaiShort}`);
+      } else {
+        ok('short-description 两处一致');
+      }
+
+      // display_name 必填且非空。
+      if (!iface.display_name || !String(iface.display_name).trim()) {
+        fail(`${name}: openai.yaml 缺 interface.display_name 或为空`);
+      } else {
+        ok(`display_name = ${iface.display_name}`);
+      }
+
+      // default_prompt 须含 $<skill-name> 占位（CONTRIBUTING 约定）。
+      const promptName = fmNameValue || name;
+      const placeholder = `$${promptName}`;
+      if (!iface.default_prompt) {
+        fail(`${name}: openai.yaml 缺 interface.default_prompt`);
+      } else if (!iface.default_prompt.includes(placeholder)) {
+        fail(`${name}: interface.default_prompt 未包含占位符 ${placeholder}`);
+      } else {
+        ok(`default_prompt 含占位符 ${placeholder}`);
+      }
+
+      // policy.allow_implicit_invocation 与 metadata.internal 配套：
+      // internal → false；非 internal → 不得为 false（默认 true）。
+      const allow = policy.allow_implicit_invocation;
+      const allowIsFalse = allow === false || allow === 'false';
+      if (internal) {
+        if (!allowIsFalse) fail(`${name}: internal skill 须设 policy.allow_implicit_invocation: false（当前 ${allow ?? '缺失'}）`);
+        else ok('policy.allow_implicit_invocation = false（与 internal 配套）');
+      } else {
+        if (allowIsFalse) fail(`${name}: 非 internal skill 不应设 policy.allow_implicit_invocation: false`);
+        else ok(`policy.allow_implicit_invocation = ${allow ?? 'true（默认）'}`);
+      }
     }
+
+    const inReadme = readmeSkills.includes(name);
+    if (internal && inReadme) fail(`${name}: internal skill 不应出现在 README「当前 Skills」`);
+    else if (!internal && !inReadme) fail(`${name}: 非 internal skill 未登记到 README「当前 Skills」`);
+    else ok(internal ? 'internal，未进 README 当前 Skills' : '已登记到 README');
   }
 
-  const inReadme = readmeSkills.includes(name);
-  if (internal && inReadme) fail(`${name}: internal skill 不应出现在 README「当前 Skills」`);
-  else if (!internal && !inReadme) fail(`${name}: 非 internal skill 未登记到 README「当前 Skills」`);
-  else ok(internal ? 'internal，未进 README 当前 Skills' : '已登记到 README');
+  for (const n of readmeSkills) {
+    if (!skillDirs.some((d) => basename(d) === n)) fail(`README 列出「${n}」但无对应目录`);
+  }
+
+  console.log(`\n${failures.length === 0 ? '✓ 全部通过' : `✗ ${failures.length} 项失败`}`);
+  return failures.length;
 }
 
-for (const n of readmeSkills) {
-  if (!skillDirs.some((d) => basename(d) === n)) fail(`README 列出「${n}」但无对应目录`);
+// CLI 入口：仅当作为主模块直接运行时执行，import 时不触发（便于测试）。
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  const n = checkSkills();
+  process.exit(n === 0 ? 0 : 1);
 }
-
-console.log(`\n${failures.length === 0 ? '✓ 全部通过' : `✗ ${failures.length} 项失败`}`);
-process.exit(failures.length === 0 ? 0 : 1);
