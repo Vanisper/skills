@@ -1,37 +1,46 @@
-# 新建 Skill 清单
+# 新建 Skill 提交前自检清单
 
-## 最小结构
+一句话：搭好结构、写完正文后，逐条对下面这张单子，再跑校验命令收尾。
 
-新 skill 至少应包含：
+## 结构
 
-- `SKILL.md`
-- `agents/openai.yaml`
-- `references/`
+- 目录位于 `skills/<skill-name>/`，三件套齐备（`SKILL.md`、`agents/openai.yaml`、`references/`）
+- 额外资产目录（如 `templates/`）已在 `SKILL.md` 登记用途
 
-## Frontmatter 检查项
+## Frontmatter
 
-- `name` 是否为英文短横线命名
-- `description` 是否解释了“做什么、什么时候用”
-- 长描述是否已显式加引号
-- 是否需要 `metadata.internal: true`
+- `name` 为英文、小写、短横线命名
+- `description` 说清「做什么、什么时候用」（参与发现，必填）
+- 字符串值一律加引号
+- 内部 / 演示类 skill 才写 `metadata.internal: true`
 
-## 文档检查项
+## agents/openai.yaml
 
-- 首段是否一句话说清「做什么、什么时候用」（摘要先行）
-- 正文标题是否统一中文（目录名、命令与代码标识除外）；路由节是否命名为「何时读哪份 reference」
-- 是否在「何时读哪份 reference」为每个 reference 登记了触发意图
-- 主入口是否足够简洁
-- 复杂细节是否拆到了 `references/`
+- `display_name` 非空
+- `short_description` 与 `SKILL.md` 的 `metadata.short-description` **逐字一致**
+- `default_prompt` 含 `$<skill-name>` 占位
+- `policy.allow_implicit_invocation`：默认 `true`；`internal: true` 时须配 `false`
+
+## 文档
+
+- 首段一句话说清「做什么、什么时候用」（摘要先行）
+- 正文标题统一中文（目录名、命令与代码标识除外）；路由节命名为「何时读哪份 reference」
+- 每个 `references/*.md` 都在「何时读哪份 reference」登记了触发意图（无孤儿）
+- `SKILL.md` 里指向 `references/`、`scripts/` 的相对链接都真实存在
+- 复杂细节已拆到 `references/`
+
+## README
+
+- 公开 skill 已登记到 README「当前 Skills」；内部 skill **不要**出现在那里
 
 ## 校验命令
 
-公开 skill：
-
 ```bash
-npx skills add /path/to/repo --list
+node scripts/check-skills.mjs            # 结构与一致性，须 ✓ 全部通过
+npx skills add /path/to/repo --list      # 公开 skill 发现校验
 ```
 
-内部模板类 skill：
+内部模板类 skill 追加：
 
 ```bash
 INSTALL_INTERNAL_SKILLS=1 npx skills add /path/to/repo --list

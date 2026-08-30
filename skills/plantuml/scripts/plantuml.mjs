@@ -12,6 +12,7 @@
 //   --backend plantuml|kroki        默认 plantuml（两者 GET 编码相同，仅 base/path 不同）
 //   --base URL                      覆盖 server 基址（自建 plantuml-server / 自建 kroki）
 //   --hex                           仅 plantuml：~h 无压缩十六进制（仅极小图/调试）
+//   --timeout <ms>                  render/text 拉取超时，默认 20000ms；超时非零退出（url 不联网、不受影响）
 //   -o, --out FILE                  render 输出文件（省略则写到源码旁同名 .<format>；- 表示 stdout）
 //
 // 注意：官方公共 server（plantuml.com）挂了 Ezoic 广告层，/utxt/ 偶尔被注入 HTML。
@@ -26,7 +27,10 @@ import { fileURLToPath } from 'node:url';
 const PLANTUML_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_';
 const DEFAULT_PLANTUML_BASE = 'https://www.plantuml.com/plantuml';
 const DEFAULT_KROKI_BASE = 'https://kroki.io';
-export const FORMATS = new Set(['svg', 'png', 'txt', 'utxt', 'pdf', 'eps', 'latex']);
+// 仅保留公共 server 稳定可渲染、且已在 help()/SKILL.md 记录的格式。
+// pdf 在官方公共 server 上稳定命中 Ezoic 广告层 HTML（实测不可靠），eps/latex 虽能渲染但属小众且未记录，
+// 故按「宁可显式失败，不可静默漏检」收窄为文档一致的白名单；需要 pdf/eps/latex 请走本地 jar 或自建 server。
+export const FORMATS = new Set(['svg', 'png', 'txt', 'utxt']);
 
 const enc6 = (b) => PLANTUML_ALPHABET[b & 0x3f];
 
@@ -75,13 +79,13 @@ export function validate(format, body) {
   if (format === 'svg') return (head.trimStart().startsWith('<svg') || head.trimStart().startsWith('<?xml')) && !looksHtml;
   if (format === 'png') return body.length > 8 && body[0] === 0x89 && body[1] === 0x50 && body[2] === 0x4e && body[3] === 0x47;
   if (format === 'txt' || format === 'utxt') return !looksHtml;
-  // pdf/eps/latex：至少兜底拦截 HTML 注入
-  if (format === 'pdf' || format === 'eps' || format === 'latex') return !looksHtml;
   return true;
 }
 
-function parseArgs(argv) {
-  const opts = { format: null, backend: 'plantuml', base: null, hex: false, out: null, utxt: false, file: null };
+const DEFAULT_TIMEOUT_MS = 20000;
+
+export function parseArgs(argv) {
+  const opts = { format: null, backend: 'plantuml', base: null, hex: false, out: null, utxt: false, file: null, timeout: DEFAULT_TIMEOUT_MS };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '-f' || a === '--format') opts.format = argv[++i];
@@ -90,7 +94,10 @@ function parseArgs(argv) {
     else if (a === '--hex') opts.hex = true;
     else if (a === '-o' || a === '--out') opts.out = argv[++i];
     else if (a === '--utxt') opts.utxt = true;
-    else if (a === '-h' || a === '--help') opts.help = true;
+    else if (a === '--timeout') {
+      const t = Number(argv[++i]);
+      opts.timeout = Number.isFinite(t) && t > 0 ? t : DEFAULT_TIMEOUT_MS;
+    } else if (a === '-h' || a === '--help') opts.help = true;
     else if (!opts.file && !a.startsWith('-')) opts.file = a;
   }
   return opts;
@@ -109,6 +116,7 @@ options：
   --backend plantuml|kroki        默认 plantuml（两者 GET 编码相同）
   --base URL                      自建 server 基址（plantuml-server：http://localhost:8080/plantuml；kroki：http://localhost:8000）
   --hex                           plantuml 专用：~h 无压缩十六进制（仅极小图/调试）
+  --timeout <ms>                  render/text 拉取超时，默认 20000ms；超时非零退出（url 不联网、不受此限）
   -o, --out FILE                  render 输出文件（省略则写到源码旁同名 .<format>；- 表示 stdout）
 
 说明：官方公共 server 与 Kroki 的 /plantuml/ 端点共用 PlantUML 自定义编码，故 --backend 只切 base/path。
@@ -174,8 +182,24 @@ async function main() {
   }
 
   reportPrivacy(url);
-  const res = await fetch(url);
-  const body = Buffer.from(await res.arrayBuffer());
+  // 拉取加超时：慢/挂死的公共 server 不能拖住进程。AbortController 触发后走 fail 路径非零退出，
+  // 无论成功失败都在 finally 清掉定时器，避免悬挂 handle 让进程无法自然退出。
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), opts.timeout);
+  let res;
+  let body;
+  try {
+    res = await fetch(url, { signal: controller.signal });
+    body = Buffer.from(await res.arrayBuffer());
+  } catch (e) {
+    if (e.name === 'AbortError') {
+      process.stderr.write(`[plantuml] 渲染超时（>${opts.timeout}ms, format=${format}）；可加 --timeout <ms> 放宽，或改用自建/本地后端\n`);
+      process.exit(1);
+    }
+    throw e;
+  } finally {
+    clearTimeout(timer);
+  }
   if (!res.ok || !validate(format, body)) fail(format, res.status, body);
 
   if (sub === 'render') {
