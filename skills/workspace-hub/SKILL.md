@@ -37,9 +37,7 @@ metadata:
 
 ## 问询纪律
 
-（问询纪律内化自 mattpocock/skills 的 grilling skill（MIT）；本 skill 不在运行时依赖它。如需开放式、无固定产出的压力测试，可另行引入上游 grilling。）
-
-- 一次只问一个问题，等回答后再问下一个；每个问题附推荐答案。
+- 优先一次一问、每问附推荐答案；用户已一次给出多项答案时按答推进，不要为了纪律再拆碎。
 - 事实靠勘察（文件系统、git、工具）获取，不问用户；决策必须由用户拍板。
 - 用户答「你定」时采用推荐答案，并在产出文档中如实标注为默认值。
 - 每阶段结束输出小结，经确认后进入下一阶段；悬而未决的点归集进「待探讨」小节，不写成肯定句。
@@ -91,8 +89,12 @@ metadata:
 - 仓库形态：模板默认按多仓库形态表述；用户在问询中确认 monorepo 时，改写模板中的相关表述（README / guide / project-map 的仓库形态句）。
 - 不发明用户未做出的决定；一切未决显式登记。
 
+## 何时读哪份 reference
+
+- 分阶段问询 / 决策 → [elicitation.md](references/elicitation.md)
+- 路由 C 体检 / 改造、A/B 自检 → [audit.md](references/audit.md)
+
 ## 目录
 
-- [references/elicitation.md](references/elicitation.md) — 分阶段问询清单
-- [references/audit.md](references/audit.md) — 体检清单（路由 C，兼作路由 A/B 自检）
+- `references/` — 按意图分流的细则。
 - `templates/` — 骨架模板，目录结构与目标工作空间同构
