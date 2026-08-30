@@ -28,7 +28,6 @@
 
 - 首导出符号是否单独写了 JSDoc，避免文件级注释被误挂到第一个导出
 - 是否用了项目接受的 JSDoc / TSDoc 风格块注释，且未在一个项目里混出两套标签体系
-- React 是否避免把 `@emits` 套到 props / callback / Hook 上
 - constructor parameter properties 的说明是否下沉到成员本身，而非堆在主注释
 
 ### Rust

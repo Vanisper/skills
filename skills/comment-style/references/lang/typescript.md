@@ -98,12 +98,10 @@ Vue：
 
 - 面向使用者：把 JSDoc 写在 `defineProps` 的 interface 成员上，使用方 hover 该 prop 时显示
 - 面向维护者：`<script setup>` 顶部可用盒式局域头对组件职责做整体叙述（见 [rules.md](../rules.md)「文件头与局域头注释」）
-- `@emits` 是 JSDoc 中 `@fires` 的同义词，Vue 生态惯用它记录组件事件
 
 React：
 
 - Props 记 interface 注释、callback 记 JSDoc、Hook 返回值和契约记在 Hook 的块注释里
-- 不套用 Vue 的 `@emits` 事件语义，改记 props / callback / Hook 契约
 
 ## 规范依据
 
