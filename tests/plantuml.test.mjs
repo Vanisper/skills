@@ -10,6 +10,7 @@ import {
   encodeHex,
   buildUrl,
   validate,
+  parseArgs,
   FORMATS,
 } from '../skills/plantuml/scripts/plantuml.mjs';
 
@@ -91,10 +92,38 @@ test('validate: txt 非 HTML 正文通过', () => {
   assert.equal(validate('txt', Buffer.from('+-----+\n| Bob |\n+-----+')), true);
 });
 
-test('FORMATS 白名单：支持 svg/png/txt/utxt，不含 gif 等未知格式', () => {
-  for (const f of ['svg', 'png', 'txt', 'utxt', 'pdf', 'eps', 'latex']) {
+test('FORMATS 白名单：仅 svg/png/txt/utxt，与文档一致（收窄，剔除 pdf/eps/latex）', () => {
+  for (const f of ['svg', 'png', 'txt', 'utxt']) {
     assert.ok(FORMATS.has(f), `应支持 ${f}`);
   }
-  assert.equal(FORMATS.has('gif'), false);
-  assert.equal(FORMATS.has('jpeg'), false);
+  // pdf 公共 server 稳定返回广告层 HTML；eps/latex 属小众导出且未记录：一并剔除，保持文档与实现一致
+  for (const f of ['pdf', 'eps', 'latex', 'gif', 'jpeg']) {
+    assert.equal(FORMATS.has(f), false, `不应包含 ${f}`);
+  }
+  assert.equal(FORMATS.size, 4);
+});
+
+test('parseArgs: --timeout 缺省 20000ms', () => {
+  assert.equal(parseArgs(['render', '-']).timeout, 20000);
+});
+
+test('parseArgs: --timeout 覆盖为合法正数', () => {
+  assert.equal(parseArgs(['render', '-', '--timeout', '5000']).timeout, 5000);
+});
+
+test('parseArgs: --timeout 非法值（非数字/非正）回退默认', () => {
+  assert.equal(parseArgs(['render', '-', '--timeout', 'abc']).timeout, 20000);
+  assert.equal(parseArgs(['render', '-', '--timeout', '0']).timeout, 20000);
+  assert.equal(parseArgs(['render', '-', '--timeout', '-3']).timeout, 20000);
+});
+
+test('parseArgs: 其余选项解析（format/backend/base/hex/out/utxt/file）', () => {
+  const o = parseArgs(['-f', 'png', '--backend', 'kroki', '--base', 'http://x', '--hex', '-o', 'a.png', '--utxt', 'd.puml']);
+  assert.equal(o.format, 'png');
+  assert.equal(o.backend, 'kroki');
+  assert.equal(o.base, 'http://x');
+  assert.equal(o.hex, true);
+  assert.equal(o.out, 'a.png');
+  assert.equal(o.utxt, true);
+  assert.equal(o.file, 'd.puml');
 });
