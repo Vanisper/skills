@@ -26,7 +26,10 @@ import { fileURLToPath } from 'node:url';
 const PLANTUML_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_';
 const DEFAULT_PLANTUML_BASE = 'https://www.plantuml.com/plantuml';
 const DEFAULT_KROKI_BASE = 'https://kroki.io';
-export const FORMATS = new Set(['svg', 'png', 'txt', 'utxt', 'pdf', 'eps', 'latex']);
+// 仅保留公共 server 稳定可渲染、且已在 help()/SKILL.md 记录的格式。
+// pdf 在官方公共 server 上稳定命中 Ezoic 广告层 HTML（实测不可靠），eps/latex 虽能渲染但属小众且未记录，
+// 故按「宁可显式失败，不可静默漏检」收窄为文档一致的白名单；需要 pdf/eps/latex 请走本地 jar 或自建 server。
+export const FORMATS = new Set(['svg', 'png', 'txt', 'utxt']);
 
 const enc6 = (b) => PLANTUML_ALPHABET[b & 0x3f];
 
@@ -75,13 +78,13 @@ export function validate(format, body) {
   if (format === 'svg') return (head.trimStart().startsWith('<svg') || head.trimStart().startsWith('<?xml')) && !looksHtml;
   if (format === 'png') return body.length > 8 && body[0] === 0x89 && body[1] === 0x50 && body[2] === 0x4e && body[3] === 0x47;
   if (format === 'txt' || format === 'utxt') return !looksHtml;
-  // pdf/eps/latex：至少兜底拦截 HTML 注入
-  if (format === 'pdf' || format === 'eps' || format === 'latex') return !looksHtml;
   return true;
 }
 
-function parseArgs(argv) {
-  const opts = { format: null, backend: 'plantuml', base: null, hex: false, out: null, utxt: false, file: null };
+const DEFAULT_TIMEOUT_MS = 20000;
+
+export function parseArgs(argv) {
+  const opts = { format: null, backend: 'plantuml', base: null, hex: false, out: null, utxt: false, file: null, timeout: DEFAULT_TIMEOUT_MS };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '-f' || a === '--format') opts.format = argv[++i];
