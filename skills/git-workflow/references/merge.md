@@ -5,7 +5,7 @@
 - 团队协作优先通过 Pull Request 或 Merge Request 合并。
 - 如果目标分支受保护，不要绕过保护策略在本地强行推送或合并。
 - 合并前先更新目标分支，再把目标分支的最新内容同步回源分支，减少最后一刻的冲突。
-- 本地合并时默认优先使用 `--no-ff`，保留明确的合并记录。
+- 本地合并时，若团队希望保留明确的合并记录，可用 `--no-ff`；这是口味，不是铁律。
 - 合并后是否删除源分支，取决于用户要求或既有工作流，不要擅自删除。
 
 ## 推荐合并准备流程
@@ -14,14 +14,14 @@
    - `git checkout main`
    - `git pull --ff-only origin main`（--ff-only 防止 pull 在分叉时产生意外的 merge commit）
 2. 将目标分支最新内容同步到源分支：
-   - `git checkout develop`
+   - `git checkout <source-branch>`
    - `git merge main`
    - 如果用户明确要求线性历史，也可以使用 `git rebase main`，但要先评估 rebase 对历史改写的影响
 3. 将源分支合并回目标分支：
    - `git checkout main`
-   - `git merge --no-ff develop`
+   - `git merge --no-ff <source-branch>`（`--no-ff` 是团队口味，见下）
 4. 推送目标分支：
-   - `git push origin main`
+   - 用户要求后再 push（例如 `git push origin main`）；不要自行推送
 
 ## 合并策略
 
@@ -31,11 +31,11 @@
 - 个人或纯本地仓库：可以接受本地直接合并。
 - 如果托管平台提供多种合并方式，默认优先 `Create a merge commit`，除非仓库已经明确规定使用 squash 或 rebase。
 
-为什么这里默认推荐 `--no-ff`：
+何时值得用 `--no-ff`（团队口味，不是铁律）：
 
-- 可以保留分支合并轨迹。
-- 更容易追溯某个功能或修复是在什么时候进入主分支的。
-- 后续如果整条分支需要撤销，也更方便处理。
+- 希望保留分支合并轨迹。
+- 希望更容易追溯某个功能或修复是在什么时候进入主分支的。
+- 后续如果整条分支需要撤销，merge commit 往往更好处理。
 
 ## 个人仓库工作流
 
@@ -48,7 +48,7 @@
 
 适用场景对照：
 
-- **团队仓库**：特性分支 + PR/MR + 代码审查 + CI；合并走 `--no-ff` 保留轨迹。
+- **团队仓库**：特性分支 + PR/MR + 代码审查 + CI；若团队在意合并轨迹，可用 `--no-ff`。
 - **个人仓库**：直接在默认分支提交 + 按需 push；省去分支与审查开销。
 
 即便个人仓库，涉及 force-push、reset 改写已推送历史时，仍参考 [remote.md](remote.md) 与 [rollback.md](rollback.md)。

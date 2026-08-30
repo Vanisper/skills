@@ -113,13 +113,14 @@ function help() {
 
 options：
   -f, --format svg|png|txt|utxt   render 默认 svg；text 默认 txt（--utxt 强制 utxt）
-  --backend plantuml|kroki        默认 plantuml（两者 GET 编码相同）
-  --base URL                      自建 server 基址（plantuml-server：http://localhost:8080/plantuml；kroki：http://localhost:8000）
+  --backend plantuml|kroki        默认 plantuml（GET 编码相同，能力不同）
+  --base URL                      自建 server 基址（Docker jetty 默认 http://localhost:8080；kroki：http://localhost:8000）
   --hex                           plantuml 专用：~h 无压缩十六进制（仅极小图/调试）
   --timeout <ms>                  render/text 拉取超时，默认 20000ms；超时非零退出（url 不联网、不受此限）
   -o, --out FILE                  render 输出文件（省略则写到源码旁同名 .<format>；- 表示 stdout）
 
-说明：官方公共 server 与 Kroki 的 /plantuml/ 端点共用 PlantUML 自定义编码，故 --backend 只切 base/path。
+说明：官方公共 server 与 Kroki 的 /plantuml/ 端点共用 PlantUML 自定义编码，故 GET 路径下 --backend 只切 base/path；能力并不相同（公共 /utxt/、PDF、PNG -nometadata 等）。
+     官方镜像 plantuml/plantuml-server:jetty 的 BASE_URL 默认为 ROOT（http://localhost:8080）。/plantuml 前缀用于 mvn jetty:run，或 Docker 设置 BASE_URL=plantuml。
      大图免编码可改用 Kroki POST：curl -X POST https://kroki.io/plantuml/svg -H 'Content-Type: text/plain' --data-binary @diagram.puml -o diagram.svg`);
 }
 

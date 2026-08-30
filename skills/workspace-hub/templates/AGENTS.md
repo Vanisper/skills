@@ -21,7 +21,7 @@
 - 业务札记：统一放 `docs/business/`。
 - 项目之外的记录（随笔、心得、见闻等）：统一放 `docs/blog/`。
 - skills：统一放根目录 `skills/` 下；对应 skill 的指令优先于本文件的一般约定。
-<!-- 若使用特定 skill 工具集（如 superpowers 等），为其产物约定统一落点（如 docs/<工具名>/），由问询结果决定是否保留 -->
+<!-- 若使用特定 skill 工具集，为其产物约定统一落点，由问询结果决定是否保留 -->
 
 ## 跨项目工作方式
 
@@ -46,7 +46,7 @@
 
 ## 提交规范
 
-- 遵循 Conventional Commits。
-- type 与 scope 用英文——scope 与 type 一样可能进入流水线等自动化判断，非英文存在近义词不统一的问题；subject 可用 {{primary_language}}。
-- header（`type(scope): subject` 整行）不超过 72 字符。
+- 遵循 Conventional Commits 基线：`type` 与 `scope` 用英文，`subject` 可用 {{primary_language}}。
+- type 与 scope 用英文——scope 与 type 一样可能进入流水线等自动化判断，非英文存在近义词不统一的问题。
+- 72 字符上限、emoji、扩展 type（如 `init` / `examples` / `types`）仅在该仓库接入共享 commitlint 配置时适用；新工作空间默认只采用基线，不把这些细则写成硬规则。
 - 复杂改动按需补充 body；body 中有序、无序列表按需使用。

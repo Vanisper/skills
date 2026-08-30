@@ -44,6 +44,24 @@ test('buildUrl: --base 覆盖 plantuml 基址', () => {
   );
 });
 
+test('buildUrl: 官方 Docker jetty 默认 ROOT 基址（无 /plantuml 前缀）', () => {
+  assert.equal(
+    buildUrl(SOURCE, 'svg', 'plantuml', 'http://localhost:8080', false),
+    `http://localhost:8080/svg/${GOLDEN}`,
+  );
+});
+
+test('help: 自建 Docker --base 默认写 ROOT，不把 /plantuml 当官方镜像默认', () => {
+  const out = execFileSync('node', [CLI, '--help'], { encoding: 'utf8' });
+  assert.match(out, /http:\/\/localhost:8080(?!\/plantuml)/);
+  assert.match(out, /BASE_URL/);
+  assert.doesNotMatch(
+    out,
+    /plantuml-server：http:\/\/localhost:8080\/plantuml/,
+    '不应把 /plantuml 写成 plantuml-server 的默认基址',
+  );
+});
+
 test('encodeHex / buildUrl --hex: 生成 ~h 无压缩十六进制编码', () => {
   const hex = encodeHex(SOURCE);
   assert.ok(hex.startsWith('~h'), '应以 ~h 开头');

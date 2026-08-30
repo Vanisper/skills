@@ -160,7 +160,7 @@ INSTALL_INTERNAL_SKILLS=1 npx skills add /path/to/repo --list
 node scripts/check-skills.mjs
 ```
 
-校验 frontmatter 可解析、三件套齐备、`metadata.short-description` 与 `openai.yaml` 的 `short_description` 一致、README「当前 Skills」与目录同步。
+校验 frontmatter 可解析、三件套齐备、`metadata.short-description` 与 `openai.yaml` 的 `short_description` 一致、`default_prompt` 含 `$<skill-name>` 占位、`internal` 与 `allow_implicit_invocation` 配套、`references/` 无孤儿、README「当前 Skills」与目录同步。
 
 ### 本地发现校验
 
@@ -191,11 +191,24 @@ npx skills add owner/repo --list
 - `description` 参与 skill 发现，写清「做什么、什么时候用」
 - 不要把复杂细节都塞进 `SKILL.md`，优先拆到 `references/`
 
+## 编辑纪律
+
+从 comment-style 维护中沉淀、适用于本仓库所有 skill：
+
+- **对着模型的默认失败模式立轴**：先写清要纠偏什么（例如「零注释 / 只写对外 API」），再给规则。没有对立轴的 skill 容易写成散文或过引导。
+- **拿不准、纯口味、已过时的问题直接省略**，不要用一长串 caveat 把不确定写成「也算规范」。
+- **事实与口味分开写**：规范依据、工具链实测是事实；标点、72 字符、emoji、`--no-ff` 这类是口味。口味要标明，不要扮成铁律。
+- **示例必须服从旁边的规则**：规则说「标签跟随项目约定」，示例就不要把某一种标签写成唯一正确写法。
+
 ## 维护现有 Skill 时的检查项
 
 - 目录是否位于 `skills/<skill-name>/`
 - `SKILL.md` frontmatter 是否还能被 YAML 正常解析
 - `agents/openai.yaml` 的 `short_description` 是否与 `SKILL.md` 的 `metadata.short-description` 文本一致
+- `interface.default_prompt` 是否含 `$<skill-name>` 占位
+- `metadata.internal` 与 `policy.allow_implicit_invocation` 是否配套（internal → `false`；非 internal 不得为 `false`）
+- `references/` 下每个文件是否都在 `SKILL.md` 中被登记（无孤儿）
+- 内部 skill 是否未出现在 README「当前 Skills」；公开 skill 是否已登记
 - README 和 CONTRIBUTING 是否需要同步更新
 
 ## 相关链接

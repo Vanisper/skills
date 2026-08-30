@@ -25,7 +25,7 @@
 
 ## 阶段 4：约定
 
-- 提交规范？（推荐：Conventional Commits，type 与 scope 用英文，subject 随主体语言，header ≤ 72 字符）
+- 提交规范？（推荐：Conventional Commits 基线——type 与 scope 用英文，subject 随主体语言。72 字符 / emoji / 扩展 type 仅在接入共享 commitlint 配置时适用，新工作空间默认不写入这些细则）
 - 书写与注释规范？（推荐：套用 templates/docs/style-guide.md，按主体语言调整细则）
 - 文档落点是否采用默认结构（docs/projects 立项文档、business 业务札记、blog 项目外记录）？
 - 初始「待探讨」清单：把问询中悬而未决的点归集登记到对应文档。

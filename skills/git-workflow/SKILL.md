@@ -60,7 +60,7 @@ metadata:
 
 - 使用非交互式 Git 命令。
 - 尽量总结这次 staged、committed、merged、reverted 或 pushed 的结果。
-- 如果用户表达和 commit 规则冲突，优先保留 Conventional Commit 结构，再让 `subject` 跟随项目语言偏好。
+- 用户已经写好提交文案时，按用户原文提交，不要为了 Conventional Commits 结构改写措辞；只在用户让你起草时按基线组织。
 - 默认优先使用当前项目主流的 commit `subject` 语言。如果项目没有明确约定，就跟随主要文档、注释和既有 commit 历史。
 - 如果用户只给了一个大致意图，可以合理推断最小准确的 `type` 和 `scope`。
 
