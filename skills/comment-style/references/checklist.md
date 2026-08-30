@@ -11,7 +11,7 @@
 - 第一行是否先说明“这是什么”
 - 注释语言是否与项目主体语言对齐；外部 API 名、协议名、代码术语是否保留英文
 - 同一组列表的句末标点是否统一（短语、词组、简短分句不加句末标点，完整句或复杂项可加）
-- API 块注释是否按域组织（title / description / signature），**域之间是否空行**；description 是否用标签显式定位，而非只靠空行与 title 分隔
+- API 块注释是否按域组织（title / description / signature），**域之间是否空行**；仅当该语言有显式 description 标签时，才核对该标签是否按项目既有约定写出；Go / Python / Rust 的 description 就是空行后的段落
 - title 用标题语法时层级是否符合从属关系（顶层符号高于成员）且项目内一致
 - 字段、Props、options 的细节是否已经下沉到最小作用域，而不是堆在顶层注释里
 - 主注释是否只说明整体对象，成员说明是否已经下沉到成员本身
@@ -28,7 +28,6 @@
 
 - 首导出符号是否单独写了 JSDoc，避免文件级注释被误挂到第一个导出
 - 是否用了项目接受的 JSDoc / TSDoc 风格块注释，且未在一个项目里混出两套标签体系
-- Vue 事件说明是否贴近真实事件来源（defineEmits 的 JSDoc 不被 hover 支持）；React 是否避免误用 `@emits`
 - constructor parameter properties 的说明是否下沉到成员本身，而非堆在主注释
 
 ### Rust
