@@ -22,7 +22,7 @@ skill 清单见下方 [当前 Skills](#当前-skills)。想动手安装再看 [�
 
 Mermaid 不够时用 PlantUML 画复杂图（时序/类/组件/部署/状态/用例/C4）：编码成 server/Kroki URL 取回 SVG/PNG 或 ASCII 文本图，默认零本地 Java。
 
-## 口味声明
+## 偏好声明
 
 这些 skill 来自作者个人长期约定，其中两处偏好较强，他人安装前请知悉：
 
