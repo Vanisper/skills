@@ -80,7 +80,7 @@ export class Transformer {
 
 **层 2 工具链现实**（可实测验证）：
 
-- 经典 jsdoc CLI 会把 `@description` 当作完整描述并**覆盖首行摘要**；VS Code 悬浮提示 / TypeDoc 则把两者都渲染
+- 经典 jsdoc CLI 会把 `@description` 的内容整体赋给 doclet 的 `description` 字段，**取代首行与正文描述**（jsdoc 无独立 summary 字段）；VS Code 悬浮提示 / TypeDoc 则把两者都渲染
 - `@default` 的值当代码字面量呈现（jsdoc 可自动探测简单字面量）；`@defaultValue` 的内容当 markdown（TypeDoc 首选）
 
 **层 3 项目现状**：
@@ -88,7 +88,7 @@ export class Transformer {
 - 已有稳定约定就跟随；`@description` 与 `@remarks` 同属「补充说明」，一个项目只用一套
 - 项目用 TypeDoc → 优先 TSDoc 标签；项目用经典 jsdoc 生成器 → 避开 `@description` 覆盖陷阱、用 `@default`
 
-**层 4 个人口味**（显式标注，他人可取舍）：
+**层 4 个人偏好**（显式标注，他人可取舍）：
 
 - 本仓库作者偏好用 `@description` 显式标记 description 域（面向 VS Code hover 的直接性）；默认值权威来源是代码本身，仅在不直观时补默认值标签
 
@@ -110,3 +110,4 @@ React：
 - TSDoc 标准：<https://tsdoc.org>（`@remarks`、`@defaultValue`，标签三级分类）
 - vue-language-tools rich hover：<https://github.com/vuejs/language-tools/pull/5881>（实验特性、`vue.hover.rich`）
 - 查证日期：2026-08；结论若与工具新版本行为冲突，以实测为准并回来更新本节
+- 实测记录（2026-08，jsdoc 4.0.5）：带 `@description` 的 doclet 其 `description` 字段只剩标签内容，首行与正文消失；不带标签则首行与正文合并为 `description`。生成 HTML 行为一致
